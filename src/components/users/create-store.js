@@ -20,53 +20,93 @@ const Create_Store = () => {
   const [seller, setSeller] = useState("");
   const [allSeller, setAllSeller] = useState([]);
 
+  const [logoFile, setLogoFile] = useState([])
+  const [imageFiles, setImageFiles] = useState([])
+  const [logo, setLogo] = useState("")
+  const [images, setImages] = useState([])
+
+
+  const uploadImagesToImageBB = async (files, action) => {
+    for (const file of files) {
+      const formData = new FormData();
+      formData.append('image', file);
+      try {
+        const response = await fetch('https://api.imgbb.com/1/upload?key=932ae96b4af949bccda61ebea8105393', {
+          method: 'POST',
+          body: formData,
+        });
+        const data = await response.json();
+        if (action === "images") {
+          setImages([...images, data?.data?.url])
+        }
+        if (action === "logo") {
+          setLogo(data?.data?.url)
+        }
+      } catch (error) {
+        console.error('Error uploading image:', error);
+      }
+    }
+  };
+
+
   const handleSubmit = (event) => {
     event.preventDefault();
     const form = event.target;
 
-    const name = form.name.value;
-    const address = form.address.value;
-    const description = form.description.value;
-    const user = seller.name;
-    const userID = seller._id;
+    if (imageFiles?.length > 0) {
+      uploadImagesToImageBB(imageFiles, "images")
+    }
 
-    const data = {
-      name,
-      address,
-      description,
-      user,
-      userID,
-    };
+    if (logoFile) {
+      uploadImagesToImageBB(logoFile, "logo")
+    }
 
-    fetch(`http://localhost:5000/api/store/${seller._id}`, {
-      method: "POST",
-      headers: {
-        "content-type": "application/json",
-      },
-      body: JSON.stringify(data),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        window.location.reload(true);
-        console.log(data);
-      });
+    if (logo) {
+
+      const data = {
+        name: form.name.value,
+        username: form.name.value,
+        street: form.street.value,
+        city: form.city.value,
+        country: form.country.value,
+        postalCode: form.postalCode.value,
+        email: form.email.value,
+        description: form.description.value,
+        userId: seller?._id,
+        logo: logo,
+        images: images,
+      };
+      console.log(data);
+      fetch(`http://localhost:5000/api/store/add/${seller?._id}`, {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify(data),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          window.location.reload(true);
+          console.log(data);
+        });
+    }
   };
 
-  // useEffect(() => {
-  //   fetch("http://localhost:5000/api/user/")
-  //     .then((res) => res.json())
-  //     .then((data) => {
-  //       const seller = data.filter((item) => item.role === "seller");
-  //       setAllSeller(seller);
-  //     });
-  // }, []);
+  useEffect(() => {
+    fetch("http://localhost:5000/api/user/")
+      .then((res) => res.json())
+      .then((data) => {
+        const seller = data.filter((item) => item.role === "seller");
+        setAllSeller(seller);
+      });
+  }, []);
 
-  // useEffect(() => {
-  //   const usr = localStorage.getItem("user-id");
-  //   fetch(`http://localhost:5000/api/user/${usr}`)
-  //     .then((res) => res.json())
-  //     .then((data) => setSeller(data));
-  // }, []);
+  useEffect(() => {
+    const usr = localStorage.getItem("user-id");
+    fetch(`http://localhost:5000/api/user/${usr}`)
+      .then((res) => res.json())
+      .then((data) => setSeller(data));
+  }, []);
 
   // console.log(allSeller);
   // console.log(seller);
@@ -87,6 +127,7 @@ const Create_Store = () => {
                   onSubmit={handleSubmit}
                 >
                   <h4>Store Details</h4>
+
                   <FormGroup className="row">
                     <Label className="col-xl-3 col-md-4">
                       <span>*</span> Name
@@ -97,93 +138,159 @@ const Create_Store = () => {
                         className="form-control"
                         id="validationCustom0"
                         type="text"
-                        required=""
+                        required={true}
                         name="name"
                       />
                     </div>
                   </FormGroup>
+
                   <FormGroup className="row">
                     <Label className="col-xl-3 col-md-4">
                       <span>*</span> Address
                     </Label>
-                    <div className="col-xl-8 col-md-7">
+                    <div className="d-flex justify-content-between w-full gap-4 col-md-8">
                       <Input
                         // onChange={(e) => setLastName(e.target.value)}
-                        className="form-control"
+                        className="form-control w-full"
                         id="validationCustom1"
                         type="text"
-                        required=""
-                        name="address"
+                        required={true}
+                        placeholder="street"
+                        name="street"
+                      />
+                      <Input
+                        // onChange={(e) => setLastName(e.target.value)}
+                        className="form-control w-full"
+                        id="validationCustom1"
+                        type="text"
+                        required={true}
+                        placeholder="city"
+                        name="city"
+                      />
+                      <Input
+                        // onChange={(e) => setLastName(e.target.value)}
+                        className="form-control w-full"
+                        id="validationCustom1"
+                        type="text"
+                        required={true}
+                        placeholder="country"
+                        name="country"
+                      />
+                      <Input
+                        // onChange={(e) => setLastName(e.target.value)}
+                        className="form-control w-full"
+                        id="validationCustom1"
+                        type="text"
+                        required={true}
+                        placeholder="postal Code"
+                        name="postalCode"
                       />
                     </div>
                   </FormGroup>
+
+                  <FormGroup className="row">
+                    <Label className="col-xl-3 col-md-4">
+                      <span>*</span> Email
+                    </Label>
+                    <div className="col-xl-8 col-md-7">
+                      <Input
+                        className="form-control"
+                        id="validationCustom1"
+                        type="text"
+                        placeholder="Email Address"
+                        required={true}
+                        name="email"
+                      />
+                    </div>
+                  </FormGroup>
+
                   <FormGroup className="row">
                     <Label className="col-xl-3 col-md-4">
                       <span>*</span> Description
                     </Label>
                     <div className="col-xl-8 col-md-7">
-                      {/* <Input
-                        // onChange={(e) => setEmail(e.target.value)}
+                      <textarea aria-label="With textarea"
                         className="form-control"
-                        id="validationCustom2"
+                        id="validationCustom1"
                         type="text"
-                        required=""
-                      /> */}
-                      <textarea rows="" cols="" name="description"></textarea>
-                      <Dropdown>
-                        <Dropdown.Toggle variant="success" id="dropdown-basic">
-                          Choose Seller
-                        </Dropdown.Toggle>
-
-                        {/* <Dropdown.Menu>
-                          {allSeller &&
-                            allSeller.map((item) => (
-                              <Dropdown.Item
-                                href="#/action-1"
-                                onClick={() => setSeller(item)}
-                              >
-                                {item.name}
-                              </Dropdown.Item>
-                            ))}
-                        </Dropdown.Menu> */}
-                      </Dropdown>
+                        required={true}
+                        placeholder="description"
+                        name="description"
+                      ></textarea>
                     </div>
                   </FormGroup>
-                  {/* <FormGroup className="row">
+
+
+
+                  <FormGroup className="row">
                     <Label className="col-xl-3 col-md-4">
-                      <span>*</span> Password
+                      <span></span>
                     </Label>
                     <div className="col-xl-8 col-md-7">
-                      <Input
-                        // onChange={(e) => setPassword(e.target.value)}
-                        className="form-control"
-                        id="validationCustom3"
-                        type="password"
-                        required=""
-                      />
+                      {
+                        logoFile && logoFile?.map(file => (
+                          <img className="pe-2" style={{ width: "70px" }} src={URL.createObjectURL(file)} alt="" />
+                        ))
+                      }
                     </div>
-                  </FormGroup> */}
-                  {/* <FormGroup className="row">
+                  </FormGroup>
+
+
+                  <FormGroup className="row">
                     <Label className="col-xl-3 col-md-4">
-                      <span>*</span> Confirm Password
+                      <span>*</span> Logo
                     </Label>
                     <div className="col-xl-8 col-md-7">
-                      <Input
-                        className="form-control"
-                        id="validationCustom4"
-                        type="password"
-                      />
+                      <div class="input-group">
+                        <input onChange={(e) => setLogoFile([e.target.files[0]])} type="file" name="logo" class="form-control" required={true} id="inputGroupFile02" />
+                      </div>
                     </div>
-                  </FormGroup> */}
-                  <div className="pull-right">
-                    <button
-                      className="btn btn-warning"
-                      type="submit"
-                      color="primary"
-                    >
-                      Add Store
-                    </button>
+                  </FormGroup>
+
+
+
+
+                  <FormGroup className="row">
+                    <Label className="col-xl-3 col-md-4">
+                      <span></span>
+                    </Label>
+                    <div className="col-xl-8 col-md-7">
+                      {
+                        imageFiles && imageFiles?.map(file => (
+                          <img className="pe-2" style={{ width: "70px" }} src={URL.createObjectURL(file)} alt="" />
+                        ))
+                      }
+                    </div>
+                  </FormGroup>
+
+                  <FormGroup className="row">
+                    <Label className="col-xl-3 col-md-4">
+                      <span>*</span> Images
+                    </Label>
+                    <div className="col-xl-8 col-md-7">
+                      <div class="input-group">
+                        <input onChange={(e) => setImageFiles([...imageFiles, e.target.files[0]])} type="file" class="form-control" id="inputGroupFile02" />
+                      </div>
+                    </div>
+                  </FormGroup>
+
+                  <div className="row">
+                    <div className="col-xl-3 col-md-4"></div>
+                    <div className="col-xl-8 col-md-7">
+                      <button
+                        className="btn btn-warning pull-right"
+                        type="submit"
+                        color="primary"
+                      >
+                        Add Store
+                      </button>
+                    </div>
                   </div>
+
+
+
+
+
                 </Form>
               </CardBody>
             </Card>

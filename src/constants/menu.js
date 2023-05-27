@@ -33,71 +33,91 @@ export const MENUITEMS = [
   //   badgeType: "primary",
   //   active: false,
   // },
+  // {
+  //   title: "Products",
+  //   icon: Box,
+  //   type: "sub",
+  //   active: false,
+  //   children: [
+  //     {
+  //       title: "Physical",
+  //       type: "sub",
+  //       active: false,
+  //       children: [
+  //         {
+  //           path: "/products/physical/category",
+  //           title: "Category",
+  //           type: "link",
+  //         },
+  //         // {
+  //         //   path: "/products/physical/sub-category",
+  //         //   title: "Sub Category",
+  //         //   type: "link",
+  //         // },
+  //         {
+  //           path: "/products/physical/product-list",
+  //           title: "Product List",
+  //           type: "link",
+  //         },
+  //         // {
+  //         //   path: "/products/physical/product-detail",
+  //         //   title: "Product Detail",
+  //         //   type: "link",
+  //         // },
+  //         {
+  //           path: "/products/physical/add-product",
+  //           title: "Add Product",
+  //           type: "link",
+  //         },
+  //       ],
+  //     },
+  //     {
+  //       title: "Withdraw",
+  //       type: "sub",
+  //       active: false,
+  //       children: [
+  //         {
+  //           path: "/products/digital/digital-category",
+  //           title: "Withdeaw List",
+  //           type: "link",
+  //         },
+  //         {
+  //           path: "/products/digital/digital-sub-category",
+  //           title: "Request Withdeaw ",
+  //           type: "link",
+  //         },
+  //         // {
+  //         //   path: "/products/digital/digital-product-list",
+  //         //   title: "Product List",
+  //         //   type: "link",
+  //         // },
+  //         // {
+  //         //   path: "/products/digital/digital-add-product",
+  //         //   title: "Add Product",
+  //         //   type: "link",
+  //         // },
+  //       ],
+  //     },
+  //   ],
+  // },
   {
     title: "Products",
     icon: Box,
     type: "sub",
     active: false,
     children: [
-      {
-        title: "Physical",
-        type: "sub",
-        active: false,
-        children: [
-          {
-            path: "/products/physical/category",
-            title: "Category",
-            type: "link",
-          },
-          // {
-          //   path: "/products/physical/sub-category",
-          //   title: "Sub Category",
-          //   type: "link",
-          // },
-          {
-            path: "/products/physical/product-list",
-            title: "Product List",
-            type: "link",
-          },
-          // {
-          //   path: "/products/physical/product-detail",
-          //   title: "Product Detail",
-          //   type: "link",
-          // },
-          {
-            path: "/products/physical/add-product",
-            title: "Add Product",
-            type: "link",
-          },
-        ],
-      },
-      {
-        title: "Withdraw",
-        type: "sub",
-        active: false,
-        children: [
-          {
-            path: "/products/digital/digital-category",
-            title: "Withdeaw List",
-            type: "link",
-          },
-          {
-            path: "/products/digital/digital-sub-category",
-            title: "Request Withdeaw ",
-            type: "link",
-          },
-          // {
-          //   path: "/products/digital/digital-product-list",
-          //   title: "Product List",
-          //   type: "link",
-          // },
-          // {
-          //   path: "/products/digital/digital-add-product",
-          //   title: "Add Product",
-          //   type: "link",
-          // },
-        ],
-      },
+      { path: "/products/allproducts", title: "Products", type: "link" },
+      { path: "/products/addproduct", title: "Add Product", type: "link" },
+    ],
+  },
+  {
+    title: "Cards",
+    icon: Box,
+    type: "sub",
+    active: false,
+    children: [
+      { path: "/cards/allcards", title: "Cards", type: "link" },
+      { path: "/cards/addcard", title: "Add Card", type: "link" },
     ],
   },
   {

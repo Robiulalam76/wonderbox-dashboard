@@ -57,14 +57,15 @@ const List_store = () => {
       <Container fluid={true}>
         <Card>
           <CardHeader>
-            <h5>List_store</h5>
-          </CardHeader>
-          <CardBody>
-            <div className="btn-popup pull-right">
-              <Link to="/users/create-user" className="btn btn-secondary">
+            <div className="d-flex justify-content-between">
+              <h5>List_store</h5>
+              <Link to="/store/create-store" className="btn btn-secondary">
                 List_store
               </Link>
             </div>
+          </CardHeader>
+          <CardBody>
+
             <div className="clearfix"></div>
             <div
               id="batchDelete"
