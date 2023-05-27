@@ -6,13 +6,31 @@ import { Breadcrumb, Card, CardBody, CardHeader, Container } from "reactstrap";
 const Products = () => {
     const [products, setProducts] = useState([]);
 
-    useEffect(() => {
-        fetch('http://localhost:5000/api/product/show/all')
+    const getProducts = () => {
+        fetch('http://localhost:5000/api/product')
             .then(res => res.json())
             .then(data => setProducts(data))
+    }
+
+    useEffect(() => {
+        getProducts()
     }, []);
 
-    console.log(products);
+
+    const handleUpdateStatus = (id, status) => {
+        fetch(`http://localhost:5000/api/product/status/${id}`, {
+            method: "PUT",
+            headers: {
+                "content-type": "application/json"
+            },
+            body: JSON.stringify({ status: status })
+        })
+            .then(res => res.json())
+            .then(data => {
+                console.log(data);
+                getProducts()
+            })
+    }
 
     const handleDelete = (productId) => {
         console.log('Deleting product with ID:', productId);
@@ -63,9 +81,8 @@ const Products = () => {
                                         <td>{product.children}</td>
                                         <td>{product.type}</td>
                                         <td>
-                                            <div class="form-check form-switch">
-                                                <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" checked={product.status === "true" ? true : false} />
-                                                <label class="form-check-label" for="flexSwitchCheckChecked">Checked switch checkbox input</label>
+                                            <div onClick={() => handleUpdateStatus(product?._id, product.status === "Show" ? "Hide" : "Show")} class="form-check form-switch">
+                                                <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" checked={product.status === "Show" ? true : false} />
                                             </div>
                                         </td>
                                         <td>
