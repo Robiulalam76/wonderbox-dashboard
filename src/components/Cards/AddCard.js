@@ -79,17 +79,21 @@ const AddCard = () => {
 
     const [products, setProducts] = useState([]);
 
-    useEffect(() => {
-        fetch(`http://localhost:5000/api/product/show/all`)
+    const handleGetProduct = (id) => {
+        fetch(`http://localhost:5000/api/product/store/${id}`)
             .then((res) => res.json())
             .then((data) => setProducts(data));
-    }, []);
+    }
+
 
     useEffect(() => {
         const usr = localStorage.getItem("user-id");
-        fetch(`http://localhost:5000/api/store`)
+        fetch(`http://localhost:5000/api/store/getAllStores/byrole/${usr}`)
             .then((res) => res.json())
-            .then((data) => setStores(data));
+            .then((data) => {
+                setStores(data)
+                handleGetProduct(data[0]._id)
+            });
     }, []);
 
     return (
@@ -263,25 +267,6 @@ const AddCard = () => {
                                         </div>
                                     </FormGroup>
 
-                                    <FormGroup className="row">
-                                        <Label className="col-xl-3 col-md-4">
-                                            <span>*</span> Product
-                                        </Label>
-                                        <div className="col-xl-8 col-md-7">
-                                            <select
-                                                class="form-select"
-                                                aria-label="Default select example"
-                                                placeholder="Selete product"
-                                                required={true}
-                                                name="productId"
-                                            >
-                                                {
-                                                    products && products.map(product => <option value={product?._id}>{product?.title}</option>)
-                                                }
-
-                                            </select>
-                                        </div>
-                                    </FormGroup>
 
 
                                     <FormGroup className="row">
@@ -290,6 +275,7 @@ const AddCard = () => {
                                         </Label>
                                         <div className="col-xl-8 col-md-7">
                                             <select
+                                                onChange={(e) => handleGetProduct(e.target.value)}
                                                 class="form-select"
                                                 aria-label="Default select example"
                                                 placeholder="Selete Store"
@@ -302,6 +288,29 @@ const AddCard = () => {
                                             </select>
                                         </div>
                                     </FormGroup>
+
+                                    {
+                                        products.length > 0 && <FormGroup className="row">
+                                            <Label className="col-xl-3 col-md-4">
+                                                <span>*</span> Product
+                                            </Label>
+                                            <div className="col-xl-8 col-md-7">
+                                                <select
+                                                    class="form-select"
+                                                    aria-label="Default select example"
+                                                    placeholder="Selete product"
+                                                    required={true}
+                                                    name="productId"
+                                                >
+                                                    {
+                                                        products && products.map(product => <option value={product?._id}>{product?.title}</option>)
+                                                    }
+
+                                                </select>
+                                            </div>
+                                        </FormGroup>
+                                    }
+
 
                                     <div className="row">
                                         <div className="col-xl-3 col-md-4"></div>

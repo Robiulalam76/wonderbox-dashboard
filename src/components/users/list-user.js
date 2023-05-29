@@ -25,7 +25,7 @@ const List_user = () => {
 
   const handleMakeSeller = (id) => {
     if (window.confirm("Are you really want him to make seller?")) {
-      fetch(`http://localhost:5000/api/user//seller/${id}`, {
+      fetch(`http://localhost:5000/api/user/seller/${id}`, {
         method: "PUT",
       })
         .then((res) => res.json())
@@ -38,7 +38,7 @@ const List_user = () => {
   };
 
   useEffect(() => {
-    fetch("http://localhost:5000/api/admin")
+    fetch("http://localhost:5000/api/user")
       .then((res) => res.json())
       .then((data) => setUser(data));
   }, []);

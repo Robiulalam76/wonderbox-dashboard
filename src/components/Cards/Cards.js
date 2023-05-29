@@ -9,16 +9,6 @@ const Cards = () => {
     const [stores, setStores] = useState([])
     const [storeId, setStoreId] = useState("")
 
-    useEffect(() => {
-        const usr = localStorage.getItem("user-id");
-        fetch(`http://localhost:5000/api/user/${usr}`)
-            .then((res) => res.json())
-            .then((data) => {
-
-            });
-
-    }, [])
-
     const getCards = (id) => {
         fetch(`http://localhost:5000/api/storecard/getcards/${id}`)
             .then((res) => res.json())

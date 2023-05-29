@@ -46,6 +46,7 @@ const LayoutRoutes = () => {
       .then((res) => res.json())
       .then((data) => setUser(data));
   }, []);
+
   return (
     <Fragment>
       <Routes>
@@ -68,18 +69,15 @@ const LayoutRoutes = () => {
 
 
           {/* // -----------cards----------- */}
-          {user && user.role === "admin" || user.role === "seller" && (
-            <Route
-              path={`${process.env.PUBLIC_URL}/cards/all`}
-              element={<Cards />}
-            />
-          )}
-          {user && user.role === "admin" || user.role === "seller" && (
-            <Route
-              path={`${process.env.PUBLIC_URL}/cards/add-card`}
-              element={<AddCard />}
-            />
-          )}
+          <Route
+            path={`${process.env.PUBLIC_URL}/cards/all`}
+            element={<Cards />}
+          />
+
+          <Route
+            path={`${process.env.PUBLIC_URL}/cards/add-card`}
+            element={<AddCard />}
+          />
 
 
           {/* {user && user.role === "admin" && (

@@ -17,6 +17,7 @@ import {
 } from "react-feather";
 
 // const [user, setUser] = useState("");
+
 // useEffect(() => {
 //   const usr = localStorage.getItem("user-id");
 //   fetch(`http://localhost:5000/api/user/${usr}`)
@@ -127,33 +128,33 @@ export const MENUITEMS = [
     active: false,
     children: [
       { path: "/sales/orders", title: "Orders", type: "link" },
-      { path: "/sales/transactions", title: "allNotification", type: "link" },
+      // { path: "/sales/transactions", title: "allNotification", type: "link" },
     ],
   },
-  {
-    title: "Coupons",
-    icon: Tag,
-    type: "sub",
-    active: false,
-    children: [
-      { path: "/coupons/list-coupons", title: "List Coupons", type: "link" },
-      {
-        path: "/coupons/create-coupons",
-        title: "Create Coupons",
-        type: "link",
-      },
-    ],
-  },
-  {
-    title: "Ticket ",
-    icon: Clipboard,
-    type: "sub",
-    active: false,
-    children: [
-      { path: "/pages/list-page", title: "Ticket List", type: "link" },
-      { path: "/pages/create-page", title: "Create Ticket", type: "link" },
-    ],
-  },
+  // {
+  //   title: "Coupons",
+  //   icon: Tag,
+  //   type: "sub",
+  //   active: false,
+  //   children: [
+  //     { path: "/coupons/list-coupons", title: "List Coupons", type: "link" },
+  //     {
+  //       path: "/coupons/create-coupons",
+  //       title: "Create Coupons",
+  //       type: "link",
+  //     },
+  //   ],
+  // },
+  // {
+  //   title: "Ticket ",
+  //   icon: Clipboard,
+  //   type: "sub",
+  //   active: false,
+  //   children: [
+  //     { path: "/pages/list-page", title: "Ticket List", type: "link" },
+  //     { path: "/pages/create-page", title: "Create Ticket", type: "link" },
+  //   ],
+  // },
   {
     title: "Store",
     icon: UserPlus,
