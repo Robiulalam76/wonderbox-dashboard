@@ -7,8 +7,7 @@ import { Card, CardBody, CardHeader, Container } from "reactstrap";
 import { Table } from "react-bootstrap";
 
 const List_store = () => {
-  const [store, setStore] = useState([]);
-  const [user, setUser] = useState([]);
+  const [stores, setStores] = useState([]);
 
   const handleDelete = (id) => {
     if (window.confirm("Are you really want to delete this user?")) {
@@ -26,30 +25,12 @@ const List_store = () => {
 
   useEffect(() => {
     const usr = localStorage.getItem("user-id");
-    fetch(`http://localhost:5000/api/user/${usr}`)
+    fetch(`http://localhost:5000/api/store/getAllStores/byrole/${usr}`)
       .then((res) => res.json())
       .then((data) => {
-        if (data.role === "seller") {
-          fetch("http://localhost:5000/api/store/")
-            .then((res) => res.json())
-            .then((allstores) => setStore(allstores));
-        } else {
-          fetch(`http://localhost:5000/api/store/${usr}`)
-            .then((res) => res.json())
-            .then((sellerStores) => setStore(sellerStores));
-        }
+        setStores(data)
       });
-
-    // console.log(usr);
   }, []);
-  // useEffect(() => {
-  //   fetch("http://localhost:5000/api/store/")
-  //     .then((res) => res.json())
-  //     .then((data) => setStore(data));
-  // }, []);
-
-  // console.log(store);
-  // console.log(store);
 
   return (
     <Fragment>
@@ -83,6 +64,7 @@ const List_store = () => {
                 <thead>
                   <tr>
                     <th>#</th>
+                    <th>Icon</th>
                     <th>Store Name</th>
                     <th>Address</th>
                     <th>Description</th>
@@ -92,10 +74,13 @@ const List_store = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {store &&
-                    store.map((item, idx) => (
+                  {stores &&
+                    stores.map((item, idx) => (
                       <tr key={idx}>
-                        <td>{idx + 1}</td>
+                        <td className="w-fit" >{idx + 1}</td>
+                        <td className="w-fit">
+                          <img style={{ width: "30px", height: "30px" }} src={item?.logo} alt="" />
+                        </td>
                         <td>{item?.name}</td>
                         <td>{item?.address}</td>
                         <td>{item?.description.slice(0, 100) + "..."}</td>

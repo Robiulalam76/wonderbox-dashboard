@@ -1,33 +1,61 @@
 import React, { Fragment, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Tabs, TabList, TabPanel, Tab } from "react-tabs";
 import { Button, Col, Form, FormGroup, Input, Label, Row } from "reactstrap";
 
 const TabsetUser = () => {
-  const [firstname, setFirstName] = useState("");
-  const [lastname, setLastName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const addUser = () => {
-    const userData = {
-      name: firstname + lastname,
-      email,
-      password,
-    };
+  const navigate = useNavigate()
+  const [role, setRole] = useState("seller")
+
+  const [isLoading, setIsLoading] = useState(false)
+  const [emailResult, setEmailResult] = useState("")
+  const [passwordResult, setPasswordResult] = useState("")
+  console.log(passwordResult);
+
+  const addUser = (e) => {
+    setPasswordResult("")
+    setIsLoading(true)
+    e.preventDefault()
+    const form = e.target
+
+    const password = form.password.value
+    const confirmPassword = form.confirmPassword.value
+
+    if (password !== confirmPassword) {
+      setIsLoading(false)
+      setPasswordResult("Password Not Matched")
+      return;
+    }
+
+    const newUser = {
+      name: form.firstName.value + ' ' + form.lastName.value,
+      country: form.country.value,
+      email: form.email.value,
+      phone: form.phone.value,
+      password: password,
+      role: role,
+    }
+
 
     fetch("http://localhost:5000/api/user/register", {
       method: "POST",
       headers: {
         "content-type": "application/json",
       },
-      body: JSON.stringify(userData),
+      body: JSON.stringify(newUser),
     })
       .then((res) => res.json())
       .then((data) => {
-        if (data.token) {
-          window.location.reload(true);
+        if (data?.success === true) {
+          form.reset()
+          setIsLoading(false)
+          navigate("/users/list-user")
         }
+        setIsLoading(false)
       })
-      .catch((error) => console.log(error));
+      .catch((error) => {
+        setIsLoading(false)
+      });
   };
   return (
     <Fragment>
@@ -36,64 +64,69 @@ const TabsetUser = () => {
           <Tab className="nav-link">Account</Tab>
         </TabList>
         <TabPanel>
-          <Form className="needs-validation user-add" noValidate="">
+          <Form onSubmit={addUser} className="needs-validation user-add" noValidate="">
             <h4>Account Details</h4>
+
             <FormGroup className="row">
               <Label className="col-xl-3 col-md-4">
                 <span>*</span> First Name
               </Label>
               <div className="col-xl-8 col-md-7">
                 <Input
-                  onChange={(e) => setFirstName(e.target.value)}
                   className="form-control"
                   id="validationCustom0"
                   type="text"
-                  required=""
+                  required={true}
+                  name="firstName"
                 />
               </div>
             </FormGroup>
+
             <FormGroup className="row">
               <Label className="col-xl-3 col-md-4">
                 <span>*</span> Last Name
               </Label>
               <div className="col-xl-8 col-md-7">
                 <Input
-                  onChange={(e) => setLastName(e.target.value)}
                   className="form-control"
                   id="validationCustom1"
                   type="text"
-                  required=""
+                  required={true}
+                  name="lastName"
                 />
               </div>
             </FormGroup>
+
             <FormGroup className="row">
               <Label className="col-xl-3 col-md-4">
                 <span>*</span> Email
               </Label>
               <div className="col-xl-8 col-md-7">
                 <Input
-                  onChange={(e) => setEmail(e.target.value)}
                   className="form-control"
                   id="validationCustom2"
                   type="text"
-                  required=""
+                  required={true}
+                  name="email"
                 />
               </div>
             </FormGroup>
+
             <FormGroup className="row">
               <Label className="col-xl-3 col-md-4">
                 <span>*</span> Password
               </Label>
               <div className="col-xl-8 col-md-7">
                 <Input
-                  onChange={(e) => setPassword(e.target.value)}
                   className="form-control"
                   id="validationCustom3"
                   type="password"
-                  required=""
+                  required={true}
+                  name="password"
                 />
               </div>
             </FormGroup>
+
             <FormGroup className="row">
               <Label className="col-xl-3 col-md-4">
                 <span>*</span> Confirm Password
@@ -103,9 +136,91 @@ const TabsetUser = () => {
                   className="form-control"
                   id="validationCustom4"
                   type="password"
+                  required={true}
+                  name="confirmPassword"
                 />
               </div>
             </FormGroup>
+
+            <FormGroup className="row">
+              <Label className="col-xl-3 col-md-4">
+                <span>*</span> Country
+              </Label>
+              <div className="col-xl-8 col-md-7">
+                <Input
+                  className="form-control"
+                  id="validationCustom4"
+                  type="text"
+                  required={true}
+                  name="country"
+                />
+              </div>
+            </FormGroup>
+
+            <FormGroup className="row">
+              <Label className="col-xl-3 col-md-4">
+                <span>*</span> Phone Number
+              </Label>
+              <div className="col-xl-8 col-md-7">
+                <Input
+                  className="form-control"
+                  id="validationCustom4"
+                  type="text"
+                  required={true}
+                  name="phone"
+                />
+              </div>
+            </FormGroup>
+
+            <FormGroup className="row">
+              <Label className="col-xl-3 col-md-4">
+                <span>*</span> Role
+              </Label>
+              <div className="col-xl-8 col-md-7 d-flex gap-4 ">
+                <div onClick={() => setRole("seller")} class="form-check">
+                  <input class="form-check-input"
+                    type="radio"
+                    name="flexRadioDefault" id="flexRadioDefault1"
+                    checked={role === "seller" ? true : false} />
+                  <label class="form-check-label" for="flexRadioDefault1">
+                    Seller
+                  </label>
+                </div>
+                <div onClick={() => setRole("buyer")} class="form-check">
+                  <input class="form-check-input"
+                    type="radio"
+                    name="flexRadioDefault" id="flexRadioDefault2"
+                    checked={role === "buyer" ? true : false} />
+                  <label class="form-check-label" for="flexRadioDefault2">
+                    Buyer
+                  </label>
+                </div>
+              </div>
+            </FormGroup>
+
+            <FormGroup className="row">
+              <Label className="col-xl-3 col-md-4">
+                <span></span>
+              </Label>
+              <div className="col-xl-8 col-md-7">
+                <div className="pull-right">
+
+                  {
+                    isLoading ? <button class="btn btn-primary" type="button" disabled>
+                      <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"> </span>
+                      Loading...
+                    </button>
+                      :
+                      <Button type="submit" color="primary">
+                        Save
+                      </Button>
+                  }
+                </div>
+              </div>
+            </FormGroup>
+
+
+
           </Form>
         </TabPanel>
         {/* <TabPanel>
@@ -349,11 +464,7 @@ const TabsetUser = () => {
           </Form>
         </TabPanel> */}
       </Tabs>
-      <div className="pull-right">
-        <Button onClick={addUser} type="button" color="primary">
-          Save
-        </Button>
-      </div>
+
     </Fragment>
   );
 };

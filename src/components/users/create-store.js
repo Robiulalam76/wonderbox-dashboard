@@ -75,6 +75,7 @@ const Create_Store = () => {
         userId: seller?._id,
         logo: logo,
         images: images,
+        verified: true
       };
       console.log(data);
       fetch(`http://localhost:5000/api/store/add/${seller?._id}`, {

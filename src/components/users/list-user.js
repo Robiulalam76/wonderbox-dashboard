@@ -9,38 +9,76 @@ import { Table } from "react-bootstrap";
 const List_user = () => {
   const [user, setUser] = useState([]);
 
+
+  const getUsers = () => {
+    fetch("http://localhost:5000/api/user")
+      .then((res) => res.json())
+      .then((data) => setUser(data));
+  }
+
   const handleDelete = (id) => {
+    const usr = localStorage.getItem("user-id");
     if (window.confirm("Are you really want to delete this user?")) {
-      fetch(`http://localhost:5000/api/user/${id}`, {
+      fetch(`http://localhost:5000/api/user/${id}/${usr}`, {
         method: "DELETE",
       })
         .then((res) => res.json())
         .then((data) => {
-          if (data.message) {
-            window.location.reload(true);
-          }
+          getUsers()
+        });
+    }
+  };
+
+  const handleVerifyUser = (id) => {
+    if (window.confirm("Are you really want him to make seller?")) {
+      fetch(`http://localhost:5000/api/user/${id}`, {
+        method: "PATCH",
+        headers: {
+          "content-type": "application/json"
+        },
+        body: JSON.stringify({ role: "seller" })
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          getUsers()
         });
     }
   };
 
   const handleMakeSeller = (id) => {
     if (window.confirm("Are you really want him to make seller?")) {
-      fetch(`http://localhost:5000/api/user/seller/${id}`, {
-        method: "PUT",
+      fetch(`http://localhost:5000/api/user/${id}`, {
+        method: "PATCH",
+        headers: {
+          "content-type": "application/json"
+        },
+        body: JSON.stringify({ role: "seller" })
       })
         .then((res) => res.json())
         .then((data) => {
-          if (data.status === 200) {
-            window.location.reload(true);
-          }
+          getUsers()
+        });
+    }
+  };
+
+  const handleMakeBuyer = (id) => {
+    if (window.confirm("Are you really want him to make buyer?")) {
+      fetch(`http://localhost:5000/api/user/${id}`, {
+        method: "PATCH",
+        headers: {
+          "content-type": "application/json"
+        },
+        body: JSON.stringify({ role: "buyer" })
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          getUsers()
         });
     }
   };
 
   useEffect(() => {
-    fetch("http://localhost:5000/api/user")
-      .then((res) => res.json())
-      .then((data) => setUser(data));
+    getUsers()
   }, []);
 
   return (
@@ -48,15 +86,14 @@ const List_user = () => {
       <Breadcrumb title="User List" parent="Users" />
       <Container fluid={true}>
         <Card>
-          <CardHeader>
+          <CardHeader className="d-flex justify-content-between py-2">
             <h5>User Details</h5>
+            <Link to="/users/create-user" className="btn btn-secondary py-1 px-1">
+              Create User
+            </Link>
           </CardHeader>
-          <CardBody>
-            <div className="btn-popup pull-right">
-              <Link to="/users/create-user" className="btn btn-secondary">
-                Create User
-              </Link>
-            </div>
+          <CardBody className="py-2">
+
             <div className="clearfix"></div>
             <div
               id="batchDelete"
@@ -70,14 +107,14 @@ const List_user = () => {
                 class="-striped -highlight"
               /> */}
               <Table striped bordered hover>
-                <thead>
+                <thead className="bg-info" >
                   <tr>
-                    <th>#</th>
+                    <th  >#</th>
                     <th>Name</th>
                     <th>Email</th>
                     <th>Wallet</th>
                     <th>Role</th>
-                    {/* <th>Status</th> */}
+                    <th>Status</th>
                     <th>Action</th>
                   </tr>
                 </thead>
@@ -85,7 +122,7 @@ const List_user = () => {
                   {user &&
                     user.map((item, idx) => (
                       <tr key={idx}>
-                        <td>{idx + 1}</td>
+                        <td >{idx + 1}</td>
                         <td>{item?.name}</td>
                         <td>{item?.email}</td>
                         <td>$ {item?.wallet}</td>
@@ -100,6 +137,25 @@ const List_user = () => {
                           </div>
                         </td> */}
                         <td>{item?.role}</td>
+                        <td style={{ width: "100px" }}>
+                          {
+                            item?.verified === "true" ? (
+                              <button
+                                className="btn btn-success btn-sm px-1 py-0"
+                                onClick={() => handleMakeBuyer(item._id)}
+                              >
+                                Verified
+                              </button>
+                            )
+                              :
+                              <button
+                                className="btn btn-warning btn-sm px-1 py-0"
+                                onClick={() => handleVerifyUser(item._id)}
+                              >
+                                Unverifed
+                              </button>
+                          }
+                        </td>
                         {/* <td>
                           <span
                             className={`border px-2 py-1 rounded ${
@@ -117,31 +173,32 @@ const List_user = () => {
                               "Pending"}
                           </span>
                         </td> */}
-                        <td>
-                          <div className="d-flex gap-2 justify-content-center">
-                            <>
-                              {item?.role === "admin" ||
-                                item?.role === "seller" ? (
-                                ""
-                              ) : (
-                                <button
-                                  className="btn  btn-secondary btn-sm"
-                                  onClick={() => handleMakeSeller(item._id)}
-                                >
-                                  Make Seller
-                                </button>
-                              )}
-                              {item?.role === "admin" ? (
-                                ""
-                              ) : (
-                                <button
-                                  className="btn btn-primary btn-sm"
-                                  onClick={() => handleDelete(item._id)}
-                                >
-                                  Delete
-                                </button>
-                              )}
-                            </>
+                        <td style={{ width: "180px" }}>
+                          <div className="d-flex gap-2 justify-content-center" >
+                            {
+                              item?.role === "seller" && <button
+                                className="btn btn-secondary btn-sm px-1 py-0"
+                                onClick={() => handleMakeBuyer(item._id)}
+                              >
+                                Make Buyer
+                              </button>
+                            }
+                            {
+                              item?.role === "buyer" && <button
+                                className="btn  btn-secondary btn-sm px-1 py-0"
+                                onClick={() => handleMakeSeller(item._id)} >
+                                Make Seller
+                              </button>
+                            }
+
+                            {item?.role !== "admin" && (
+                              <button
+                                className="btn btn-primary btn-sm px-1 py-0"
+                                onClick={() => handleDelete(item._id)}
+                              >
+                                Delete
+                              </button>
+                            )}
                           </div>
                         </td>
                       </tr>
