@@ -5,24 +5,31 @@ import { Card, CardBody, CardHeader, Container } from "reactstrap";
 import { Table } from "react-bootstrap";
 
 const Orders = () => {
-  const [store, setStore] = useState([]);
+  const [orders, setOrders] = useState([]);
+  const [stores, setStores] = useState([])
+  const [storeId, setStoreId] = useState("")
+
+
+  const handleGetOrders = (id) => {
+    fetch(`http://localhost:5000/api/card/orders/${id}`)
+      .then((res) => res.json())
+      .then((data) => setOrders(data));
+  }
+
+  const handleSetStoreId = (id) => {
+    setStoreId(id)
+    handleGetOrders(id)
+  }
+
 
   useEffect(() => {
     const usr = localStorage.getItem("user-id");
-    fetch(`http://localhost:5000/api/user/${usr}`)
+    fetch(`http://localhost:5000/api/store/getAllStores/byrole/${usr}`)
       .then((res) => res.json())
       .then((data) => {
-        if (data.role === "seller") {
-          fetch("http://localhost:5000/api/card/orders/6462723333057f3bb6fea4aa")
-            .then((res) => res.json())
-            .then((allstores) => setStore(allstores));
-        } else {
-          fetch(`http://localhost:5000/api/store/${usr}`)
-            .then((res) => res.json())
-            .then((sellerStores) => setStore(sellerStores));
-        }
+        setStores(data)
+        handleGetOrders(data[0]?._id)
       });
-
   }, []);
 
   return (
@@ -32,10 +39,17 @@ const Orders = () => {
         <Card>
           <CardHeader>
             <div className="d-flex justify-content-between">
-              <h5>Orders</h5>
-              {/* <Link to="/cards/addcard" className="btn btn-secondary">
-                Add Card
-              </Link> */}
+              <select style={{ width: "400px" }}
+                onClick={(e) => handleSetStoreId(e.target.value)}
+                class="form-select"
+                aria-label="Default select example"
+                placeholder="Selete Store"
+                required={true}
+                name="storeId">
+                {
+                  stores?.map(store => <option value={store?._id}>{store.name}</option>)
+                }
+              </select>
             </div>
           </CardHeader>
           <CardBody>
@@ -60,8 +74,8 @@ const Orders = () => {
                 </thead>
 
                 <tbody>
-                  {store &&
-                    store.map((item, idx) => (
+                  {orders &&
+                    orders.map((item, idx) => (
                       <tr key={idx}>
                         <td>{idx + 1}</td>
                         <td>{item?.title}</td>

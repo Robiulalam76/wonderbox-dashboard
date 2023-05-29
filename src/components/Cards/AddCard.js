@@ -12,11 +12,12 @@ import {
     Row,
 } from "reactstrap";
 import Breadcrumb from "../common/breadcrumb";
+import { useNavigate } from "react-router-dom";
 
 const AddCard = () => {
     const [stores, setStores] = useState([]);
-
     const [type, setType] = useState("");
+    const navigate = useNavigate()
 
 
     const [features, setFeatures] = useState([]);
@@ -72,7 +73,7 @@ const AddCard = () => {
         })
             .then((res) => res.json())
             .then((data) => {
-                console.log(data);
+                navigate("/dashboard/cards/all")
                 form.reset()
             });
     };
