@@ -5,24 +5,42 @@ import { Card, CardBody, CardHeader, Container } from "reactstrap";
 import { Table } from "react-bootstrap";
 
 const Cards = () => {
-    const [store, setStore] = useState([]);
+    const [cards, setCards] = useState([]);
+    const [stores, setStores] = useState([])
+    const [storeId, setStoreId] = useState("")
 
     useEffect(() => {
         const usr = localStorage.getItem("user-id");
         fetch(`http://localhost:5000/api/user/${usr}`)
             .then((res) => res.json())
             .then((data) => {
-                if (data.role === "seller") {
-                    fetch("http://localhost:5000/api/storecard/")
-                        .then((res) => res.json())
-                        .then((allstores) => setStore(allstores));
-                } else {
-                    fetch(`http://localhost:5000/api/store/${usr}`)
-                        .then((res) => res.json())
-                        .then((sellerStores) => setStore(sellerStores));
-                }
+
             });
 
+    }, [])
+
+    const getCards = (id) => {
+        fetch(`http://localhost:5000/api/storecard/getcards/${id}`)
+            .then((res) => res.json())
+            .then((data) => setCards(data.data));
+    }
+
+
+    useEffect(() => {
+        getCards(stores[0]?._id)
+    }, [stores])
+
+    const handleSetStoreId = (id) => {
+        setStoreId(id)
+        getCards(id)
+    }
+
+
+    useEffect(() => {
+        const usr = localStorage.getItem("user-id");
+        fetch(`http://localhost:5000/api/store/getAllStores/byrole/${usr}`)
+            .then((res) => res.json())
+            .then((data) => setStores(data));
     }, []);
 
     return (
@@ -32,8 +50,18 @@ const Cards = () => {
                 <Card>
                     <CardHeader>
                         <div className="d-flex justify-content-between">
-                            <h5>List Cards</h5>
-                            <Link to="/cards/addcard" className="btn btn-secondary">
+                            <select style={{ width: "400px" }}
+                                onClick={(e) => handleSetStoreId(e.target.value)}
+                                class="form-select"
+                                aria-label="Default select example"
+                                placeholder="Selete Store"
+                                required={true}
+                                name="storeId">
+                                {
+                                    stores?.map(store => <option value={store?._id}>{store.name}</option>)
+                                }
+                            </select>
+                            <Link to="/cards/add-card" className="btn btn-secondary">
                                 Add Card
                             </Link>
                         </div>
@@ -60,8 +88,8 @@ const Cards = () => {
                                 </thead>
 
                                 <tbody>
-                                    {store &&
-                                        store.map((item, idx) => (
+                                    {cards &&
+                                        cards.map((item, idx) => (
                                             <tr key={idx}>
                                                 <td>{idx + 1}</td>
                                                 <td>{item?.title}</td>
