@@ -30,13 +30,13 @@ const List_user = () => {
   };
 
   const handleVerifyUser = (id) => {
-    if (window.confirm("Are you really want him to make seller?")) {
+    if (window.confirm("Are you really want him to make Verified?")) {
       fetch(`http://localhost:5000/api/user/${id}`, {
         method: "PATCH",
         headers: {
           "content-type": "application/json"
         },
-        body: JSON.stringify({ role: "seller" })
+        body: JSON.stringify({ verified: "true" })
       })
         .then((res) => res.json())
         .then((data) => {
@@ -142,7 +142,6 @@ const List_user = () => {
                             item?.verified === "true" ? (
                               <button
                                 className="btn btn-success btn-sm px-1 py-0"
-                                onClick={() => handleMakeBuyer(item._id)}
                               >
                                 Verified
                               </button>
