@@ -1,5 +1,6 @@
 import React, { Fragment, useEffect, useState } from "react";
 import {
+    Button,
     Card,
     CardBody,
     CardHeader,
@@ -18,11 +19,12 @@ const AddProduct = () => {
     const [user, setUser] = useState(null);
     const [stores, setStores] = useState([]);
     const navigate = useNavigate()
+    const [isLoading, setIsLoading] = useState(false)
 
     const [type, setType] = useState("Wallet");
 
     const [imageFiles, setImageFiles] = useState([])
-    const [images, setImages] = useState([])
+    // const [images, setImages] = useState([])
 
 
     const [features, setFeatures] = useState([]);
@@ -49,62 +51,63 @@ const AddProduct = () => {
 
 
     const uploadImagesToImageBB = async (files) => {
+        let images = []
         for (const file of files) {
             const formData = new FormData();
             formData.append('image', file);
-            try {
-                const response = await fetch('https://api.imgbb.com/1/upload?key=932ae96b4af949bccda61ebea8105393', {
-                    method: 'POST',
-                    body: formData,
-                });
-                const data = await response.json();
-                setImages([...images, data?.data?.url])
-            } catch (error) {
-                console.error('Error uploading image:', error);
-            }
+            const response = await fetch('https://api.imgbb.com/1/upload?key=932ae96b4af949bccda61ebea8105393', {
+                method: 'POST',
+                body: formData,
+            });
+            const data = await response.json();
+            images.push(data?.data?.url)
         }
+        return images
     };
 
-
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
+        setIsLoading(true)
         event.preventDefault();
         const form = event.target;
 
         if (imageFiles?.length > 0) {
-            uploadImagesToImageBB(imageFiles)
+            const images = await uploadImagesToImageBB(imageFiles)
+            if (images.length > 0) {
+                const data = {
+                    title: form.title.value,
+                    images: images,
+                    type: form.type.value,
+                    price: form.price.value,
+                    parent: form.parent.value,
+                    children: form.children.value,
+                    description: form.description.value,
+                    storeId: form.storeId.value,
+                };
+                if (type === "Package") {
+                    data["features"] = features
+                }
+                if (type === "Wallet") {
+                    data["discount"] = form.discount.value
+                }
+                fetch(`http://localhost:5000/api/product/add`, {
+                    method: "POST",
+                    headers: {
+                        "content-type": "application/json",
+                    },
+                    body: JSON.stringify(data),
+                })
+                    .then((res) => res.json())
+                    .then((data) => {
+                        setIsLoading(false)
+                        navigate("/products/all")
+                        form.reset()
+                    });
+            }
         }
 
-        if (images) {
 
-            const data = {
-                title: form.title.value,
-                images: images,
-                type: form.type.value,
-                price: form.price.value,
-                parent: form.parent.value,
-                children: form.children.value,
-                description: form.description.value,
-                storeId: form.storeId.value,
-            };
-            if (type === "Package") {
-                data["features"] = features
-            }
-            if (type === "Wallet") {
-                data["discount"] = form.discount.value
-            }
-            fetch(`http://localhost:5000/api/product/add`, {
-                method: "POST",
-                headers: {
-                    "content-type": "application/json",
-                },
-                body: JSON.stringify(data),
-            })
-                .then((res) => res.json())
-                .then((data) => {
-                    navigate("/dashboard/products/all")
-                    form.reset()
-                });
-        }
+
+
     };
 
     useEffect(() => {
@@ -371,13 +374,19 @@ const AddProduct = () => {
                                     <div className="row">
                                         <div className="col-xl-3 col-md-4"></div>
                                         <div className="col-xl-8 col-md-7">
-                                            <button
-                                                className="btn btn-primary pull-right"
-                                                type="submit"
-                                                color="primary"
-                                            >
-                                                Add Product
-                                            </button>
+                                            <div className="pull-right">
+
+                                                {
+                                                    isLoading ? <button class="btn btn-primary" type="button" disabled>
+                                                        <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"> </span>
+                                                        Loading...
+                                                    </button>
+                                                        :
+                                                        <Button type="submit" color="primary">
+                                                            Add Product
+                                                        </Button>
+                                                }
+                                            </div>
                                         </div>
                                     </div>
 
