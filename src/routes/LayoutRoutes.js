@@ -55,30 +55,28 @@ const LayoutRoutes = () => {
             element={<Dashboard />}
           />
 
-          {user && user.role === "admin" || user.role === "seller" && (
-            <Route
-              path={`${process.env.PUBLIC_URL}/products/addproduct`}
-              element={<AddProduct />}
-            />
-          )}
-          {user && user.role === "admin" || user.role === "seller" && (
-            <Route
-              path={`${process.env.PUBLIC_URL}/products/allproducts`}
-              element={<Products />}
-            />
-          )}
+
+          <Route
+            path={`${process.env.PUBLIC_URL}/products/add-product`}
+            element={<AddProduct />}
+          />
+
+          <Route
+            path={`${process.env.PUBLIC_URL}/products/all`}
+            element={<Products />}
+          />
 
 
           {/* // -----------cards----------- */}
           {user && user.role === "admin" || user.role === "seller" && (
             <Route
-              path={`${process.env.PUBLIC_URL}/cards/allcards`}
+              path={`${process.env.PUBLIC_URL}/cards/all`}
               element={<Cards />}
             />
           )}
           {user && user.role === "admin" || user.role === "seller" && (
             <Route
-              path={`${process.env.PUBLIC_URL}/cards/addcard`}
+              path={`${process.env.PUBLIC_URL}/cards/add-card`}
               element={<AddCard />}
             />
           )}

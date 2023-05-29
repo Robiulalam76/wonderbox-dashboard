@@ -4,17 +4,18 @@ import { Link } from 'react-feather';
 import { Breadcrumb, Card, CardBody, CardHeader, Container } from "reactstrap";
 
 const Products = () => {
+    const [stores, setStores] = useState([])
     const [products, setProducts] = useState([]);
 
-    const getProducts = () => {
-        fetch('http://localhost:5000/api/product')
+    const getProducts = (id) => {
+        fetch(`http://localhost:5000/api/product/store/${id}`)
             .then(res => res.json())
             .then(data => setProducts(data))
     }
 
     useEffect(() => {
-        getProducts()
-    }, []);
+        getProducts(stores[0]?._id)
+    }, [stores]);
 
 
     const handleUpdateStatus = (id, status) => {
@@ -27,7 +28,6 @@ const Products = () => {
         })
             .then(res => res.json())
             .then(data => {
-                console.log(data);
                 getProducts()
             })
     }
@@ -40,6 +40,14 @@ const Products = () => {
         console.log('Editing product with ID:', productId);
     };
 
+
+    useEffect(() => {
+        const usr = localStorage.getItem("user-id");
+        fetch(`http://localhost:5000/api/store/getAllStores/byrole/${usr}`)
+            .then((res) => res.json())
+            .then((data) => setStores(data));
+    }, []);
+
     return (
         <Fragment>
             <Breadcrumb title="Product List" parent="Products" />
@@ -48,11 +56,23 @@ const Products = () => {
                     <CardHeader>
                         <div className="d-flex justify-content-between">
                             <h5>Products</h5>
+                            <select style={{ width: "400px" }}
+                                onClick={(e) => getProducts(e.target.value)}
+                                class="form-select"
+                                aria-label="Default select example"
+                                placeholder="Selete Store"
+                                required={true}
+                                name="storeId">
+                                {
+                                    stores?.map(store => <option value={store?._id}>{store.name}</option>)
+                                }
+                            </select>
                             <Link to="/products/addproduct" className="btn btn-secondary text-primary">Add Product</Link>
                         </div>
                     </CardHeader>
                     <CardBody>
                         <table className="table table-responsive">
+
                             <thead className='py-2' style={{ backgroundColor: "lightgrey" }} >
                                 <tr>
                                     <th>Image</th>

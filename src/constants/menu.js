@@ -106,8 +106,8 @@ export const MENUITEMS = [
     type: "sub",
     active: false,
     children: [
-      { path: "/products/allproducts", title: "Products", type: "link" },
-      { path: "/products/addproduct", title: "Add Product", type: "link" },
+      { path: "/products/all", title: "Products", type: "link" },
+      { path: "/products/add-product", title: "Add Product", type: "link" },
     ],
   },
   {
@@ -116,8 +116,8 @@ export const MENUITEMS = [
     type: "sub",
     active: false,
     children: [
-      { path: "/cards/allcards", title: "Cards", type: "link" },
-      { path: "/cards/addcard", title: "Add Card", type: "link" },
+      { path: "/cards/all", title: "Cards", type: "link" },
+      { path: "/cards/add-card", title: "Add Card", type: "link" },
     ],
   },
   {
@@ -154,19 +154,6 @@ export const MENUITEMS = [
       { path: "/pages/create-page", title: "Create Ticket", type: "link" },
     ],
   },
-  // {
-  //     title: 'Media', path: '/media', icon: Camera, type: 'link', active: false
-  // },
-  //   {
-  //     title: "Menus",
-  //     icon: AlignLeft,
-  //     type: "sub",
-  //     active: false,
-  //     children: [
-  //       { path: "/menus/list-menu", title: "List Menu", type: "link" },
-  //       { path: "/menus/create-menu", title: "Create Menu", type: "link" },
-  //     ],
-  //   },
   {
     title: "Store",
     icon: UserPlus,

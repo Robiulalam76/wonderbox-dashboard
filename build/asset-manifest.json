@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "http://localhost:3000/static/css/main.aec4ca22.css",
-    "main.js": "http://localhost:3000/static/js/main.5c14d88b.js",
+    "main.js": "http://localhost:3000/static/js/main.1ce9ab7a.js",
     "static/media/icofont.svg?v=1.0.0-beta": "http://localhost:3000/static/media/icofont.4f7f7bf78dfd2979cbba.svg",
     "static/media/icofont.eot?v=1.0.0-beta": "http://localhost:3000/static/media/icofont.556fa8050e7e3b9a829d.eot",
     "static/media/icofont.ttf?v=1.0.0-beta": "http://localhost:3000/static/media/icofont.dae25655dd28a58eb576.ttf",
@@ -296,10 +296,10 @@
     "static/media/de.svg": "http://localhost:3000/static/media/de.888f6bdce53030a6e80f.svg",
     "static/media/bd.svg": "http://localhost:3000/static/media/bd.7a30395b2f93bfd130e1.svg",
     "main.aec4ca22.css.map": "http://localhost:3000/static/css/main.aec4ca22.css.map",
-    "main.5c14d88b.js.map": "http://localhost:3000/static/js/main.5c14d88b.js.map"
+    "main.1ce9ab7a.js.map": "http://localhost:3000/static/js/main.1ce9ab7a.js.map"
   },
   "entrypoints": [
     "static/css/main.aec4ca22.css",
-    "static/js/main.5c14d88b.js"
+    "static/js/main.1ce9ab7a.js"
   ]
 }

@@ -12,17 +12,16 @@ import {
     Row,
 } from "reactstrap";
 import Breadcrumb from "../common/breadcrumb";
+import { useNavigate } from "react-router-dom";
 
 const AddProduct = () => {
-    const [seller, setSeller] = useState("");
+    const [user, setUser] = useState(null);
     const [stores, setStores] = useState([]);
+    const navigate = useNavigate()
 
-    const [type, setType] = useState("");
-    console.log(type);
+    const [type, setType] = useState("Wallet");
 
-    // const [features, setFeatures] = useState([])
     const [imageFiles, setImageFiles] = useState([])
-    const [logo, setLogo] = useState("")
     const [images, setImages] = useState([])
 
 
@@ -49,7 +48,7 @@ const AddProduct = () => {
     };
 
 
-    const uploadImagesToImageBB = async (files, action) => {
+    const uploadImagesToImageBB = async (files) => {
         for (const file of files) {
             const formData = new FormData();
             formData.append('image', file);
@@ -93,7 +92,6 @@ const AddProduct = () => {
             if (type === "Wallet") {
                 data["discount"] = form.discount.value
             }
-            console.log(data);
             fetch(`http://localhost:5000/api/product/add`, {
                 method: "POST",
                 headers: {
@@ -103,7 +101,7 @@ const AddProduct = () => {
             })
                 .then((res) => res.json())
                 .then((data) => {
-                    // window.location.reload(true);
+                    navigate("/dashboard/products/all")
                     form.reset()
                 });
         }
@@ -113,12 +111,12 @@ const AddProduct = () => {
         const usr = localStorage.getItem("user-id");
         fetch(`http://localhost:5000/api/user/${usr}`)
             .then((res) => res.json())
-            .then((data) => setSeller(data));
+            .then((data) => setUser(data));
     }, []);
 
     useEffect(() => {
         const usr = localStorage.getItem("user-id");
-        fetch(`http://localhost:5000/api/store`)
+        fetch(`http://localhost:5000/api/store/getAllStores/byrole/${usr}`)
             .then((res) => res.json())
             .then((data) => setStores(data));
     }, []);
@@ -331,6 +329,7 @@ const AddProduct = () => {
 
 
 
+
                                     <FormGroup className="row">
                                         <Label className="col-xl-3 col-md-4">
                                             <span>*</span> Store
@@ -341,8 +340,7 @@ const AddProduct = () => {
                                                 aria-label="Default select example"
                                                 placeholder="Selete Store"
                                                 required={true}
-                                                name="storeId"
-                                            >
+                                                name="storeId">
                                                 {
                                                     stores?.map(store => <option value={store?._id}>{store.name}</option>)
                                                 }

@@ -10,13 +10,11 @@ const UserPanel = () => {
       .then((data) => setUser(data));
   }, []);
   return (
-    <div>
-      <div className="sidebar-user text-center">
-        <div></div>
-        <h6 className="mt-3 f-14">{user.name}</h6>
-        <p>{user.role}</p>
-        <p>Wallet: ${user?.wallet}</p>
-      </div>
+    <div className="sidebar-user text-center">
+      <div></div>
+      <h6 className="mt-3 f-14">{user.name}</h6>
+      <p>{user.role}</p>
+      {/* <p>Wallet: ${user?.wallet}</p> */}
     </div>
   );
 };
