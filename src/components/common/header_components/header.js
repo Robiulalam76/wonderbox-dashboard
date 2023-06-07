@@ -115,7 +115,7 @@ const Header = () => {
       .then((res) => res.json())
       .then((data) => {
         if (data) {
-          fetch(`http://localhost:5000/api/history/store/${usr}`)
+          fetch(`http://localhost:5000/api/notification/store/${usr}`)
             .then(res => res.json())
             .then(data => {
               console.log(data);
