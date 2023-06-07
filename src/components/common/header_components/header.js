@@ -86,27 +86,45 @@ const Header = () => {
 
   const [seen, setSeen] = useState(false);
 
+  // useEffect(() => {
+  //   const usr = localStorage.getItem("user-id");
+  //   fetch(`http://localhost:5000/api/user/${usr}`)
+  //     .then((res) => res.json())
+  //     .then((data) => {
+  //       if (data.role === "admin") {
+  //         fetch("http://localhost:5000/api/notification/")
+  //           .then((res) => res.json())
+  //           .then((allstores) => setAllnotification(allstores));
+  //       } else {
+  //         fetch(`http://localhost:5000/api/notification/`)
+  //           .then((res) => res.json())
+  //           .then((sellerStores) => {
+  //             const noti = sellerStores.filter(
+  //               (notification) => notification.title === "Order"
+  //             );
+  //             setAllnotification(noti);
+  //           });
+  //       }
+  //     });
+  // }, [seen]);
+
+
   useEffect(() => {
     const usr = localStorage.getItem("user-id");
-    fetch(`http://localhost:5000/api/user/${usr}`)
+    fetch(`http://localhost:5000/api/store/getAllStores/byrole/${usr}`)
       .then((res) => res.json())
       .then((data) => {
-        if (data.role === "admin") {
-          fetch("http://localhost:5000/api/notification/")
-            .then((res) => res.json())
-            .then((allstores) => setAllnotification(allstores));
-        } else {
-          fetch(`http://localhost:5000/api/notification/`)
-            .then((res) => res.json())
-            .then((sellerStores) => {
-              const noti = sellerStores.filter(
-                (notification) => notification.title === "Order"
-              );
-              setAllnotification(noti);
-            });
+        if (data) {
+          fetch(`http://localhost:5000/api/history/store/${usr}`)
+            .then(res => res.json())
+            .then(data => {
+              console.log(data);
+              setAllnotification(data);
+            })
         }
       });
   }, [seen]);
+
 
   //   useEffect(() => {
   //     fetch("http://localhost:5000/api/notification/")
