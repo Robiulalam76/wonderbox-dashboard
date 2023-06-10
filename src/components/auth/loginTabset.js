@@ -6,7 +6,6 @@ import { Button, Form, FormGroup, Input, Label } from "reactstrap";
 
 const LoginTabset = () => {
   const history = useNavigate();
-  const [userId, setUserId] = useState(null);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -17,8 +16,6 @@ const LoginTabset = () => {
   };
 
   const routeChange = () => {
-    // console.log("clcked");
-    // loginHandler();
     history(`${process.env.PUBLIC_URL}/dashboard`);
   };
 
@@ -44,7 +41,6 @@ const LoginTabset = () => {
           setError(data.message);
         } else {
           const id = data._id;
-          console.log(id);
           localStorage.setItem("user-id", id);
           routeChange();
         }
@@ -197,7 +193,7 @@ const LoginTabset = () => {
                 <Button
                   color="primary"
                   type="submit"
-                // onClick={() => routeChange()}
+                  // onClick={() => routeChange()}
                 >
                   Register
                 </Button>

@@ -166,6 +166,17 @@ export const MENUITEMS = [
     ],
   },
   {
+    title: "Category",
+    icon: UserPlus,
+    type: "sub",
+    active: false,
+    children: [
+      { path: "/category/all", title: "Categories", type: "link" },
+      { path: "/category/add", title: "Create Category", type: "link" },
+      { path: "/category/request", title: "Request Categories", type: "link" },
+    ],
+  },
+  {
     title: "Users",
     icon: UserPlus,
     type: "sub",

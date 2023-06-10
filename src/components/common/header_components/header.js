@@ -79,7 +79,7 @@ const Header = () => {
 
   let filterNotification = [];
   filterNotification =
-    allNotification &&
+    allNotification?.length > 0 &&
     allNotification?.filter((notification) => notification.seen === false);
 
   //   console.log("filter noti", filterNotification);
@@ -108,7 +108,6 @@ const Header = () => {
   //     });
   // }, [seen]);
 
-
   useEffect(() => {
     const usr = localStorage.getItem("user-id");
     fetch(`http://localhost:5000/api/store/getAllStores/byrole/${usr}`)
@@ -116,15 +115,13 @@ const Header = () => {
       .then((data) => {
         if (data) {
           fetch(`http://localhost:5000/api/notification/store/${usr}`)
-            .then(res => res.json())
-            .then(data => {
-              console.log(data);
+            .then((res) => res.json())
+            .then((data) => {
               setAllnotification(data);
-            })
+            });
         }
       });
   }, [seen]);
-
 
   //   useEffect(() => {
   //     fetch("http://localhost:5000/api/notification/")
@@ -184,7 +181,7 @@ const Header = () => {
                 <Bell />
                 {filterNotification.length > 0 && (
                   <span className="badge rounded-pill badge-primary pull-right notification-badge">
-                    {filterNotification.length}
+                    {filterNotification?.length}
                   </span>
                 )}
                 <span className="dot"></span>

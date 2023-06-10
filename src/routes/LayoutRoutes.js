@@ -37,6 +37,9 @@ import AddProduct from "../components/products/AddProduct";
 import Products from "../components/products/Products";
 import Cards from "../components/Cards/Cards";
 import AddCard from "../components/Cards/AddCard";
+import AllCategory from "../components/category/AllCategory";
+import AddCategory from "../components/category/AddCategory";
+import CategoryRequest from "../components/category/CategoryRequest";
 
 const LayoutRoutes = () => {
   const [user, setUser] = useState("");
@@ -56,7 +59,6 @@ const LayoutRoutes = () => {
             element={<Dashboard />}
           />
 
-
           <Route
             path={`${process.env.PUBLIC_URL}/products/add-product`}
             element={<AddProduct />}
@@ -66,7 +68,6 @@ const LayoutRoutes = () => {
             path={`${process.env.PUBLIC_URL}/products/all`}
             element={<Products />}
           />
-
 
           {/* // -----------cards----------- */}
           <Route
@@ -78,7 +79,6 @@ const LayoutRoutes = () => {
             path={`${process.env.PUBLIC_URL}/cards/add-card`}
             element={<AddCard />}
           />
-
 
           {/* {user && user.role === "admin" && (
             <Route
@@ -175,14 +175,13 @@ const LayoutRoutes = () => {
             />
           )}
 
-
-
-          {user && user.role === "admin" || user.role === "seller" && (
-            <Route
-              path={`${process.env.PUBLIC_URL}/store/list-store`}
-              element={<List_store />}
-            />
-          )}
+          {(user && user.role === "admin") ||
+            (user.role === "seller" && (
+              <Route
+                path={`${process.env.PUBLIC_URL}/store/list-store`}
+                element={<List_store />}
+              />
+            ))}
 
           {user && user.role === "seller" && (
             <Route
@@ -191,7 +190,24 @@ const LayoutRoutes = () => {
             />
           )}
 
-
+          {/* {user && user.role === "admin" && ( */}
+          <Route
+            path={`${process.env.PUBLIC_URL}/category/all`}
+            element={<AllCategory />}
+          />
+          {/* )} */}
+          {/* {user && user.role === "admin" && ( */}
+          <Route
+            path={`${process.env.PUBLIC_URL}/category/add`}
+            element={<AddCategory />}
+          />
+          {/* )} */}
+          {/* {user && user.role === "admin" && ( */}
+          <Route
+            path={`${process.env.PUBLIC_URL}/category/request`}
+            element={<CategoryRequest />}
+          />
+          {/* )} */}
 
           {user && user.role === "admin" && (
             <Route
