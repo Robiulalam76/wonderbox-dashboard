@@ -109,6 +109,7 @@ export const MENUITEMS = [
     children: [
       { path: "/products/all", title: "Products", type: "link" },
       { path: "/products/add-product", title: "Add Product", type: "link" },
+      { path: "/products/reviews", title: "Reviews", type: "link" },
     ],
   },
   {

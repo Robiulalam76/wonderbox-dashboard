@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { Fragment } from "react";
-import { Link } from "react-feather";
 import { Breadcrumb, Card, CardBody, CardHeader, Container } from "reactstrap";
 import ProductUpdateModal from "./ProductUpdateModal";
+import { Link } from "react-router-dom";
 
 const Products = () => {
   const [stores, setStores] = useState([]);
   const [storeId, setStoreId] = useState("");
   const [product, setProduct] = useState(null);
   const [products, setProducts] = useState([]);
+
+  console.log(products);
 
   const getProducts = (id) => {
     fetch(`http://localhost:5000/api/product/store/${id}`)
@@ -97,6 +99,7 @@ const Products = () => {
                     <th>Children</th>
                     <th>Type</th>
                     <th>Status</th>
+                    <th>Ratings</th>
                     <th>Action</th>
                   </tr>
                 </thead>
@@ -136,6 +139,19 @@ const Products = () => {
                             checked={product.status === "Show" ? true : false}
                           />
                         </div>
+                      </td>
+                      <td>
+                        <Link to={`/products/${product?._id}/reviews`}>
+                          <button
+                            type="button"
+                            class="btn btn-info text-white btn-sm py-1 px-1 position-relative"
+                          >
+                            Veiw
+                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-primary">
+                              {product?.totalRatings}
+                            </span>
+                          </button>
+                        </Link>
                       </td>
                       <td>
                         <button
