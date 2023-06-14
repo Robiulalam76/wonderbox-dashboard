@@ -2,33 +2,31 @@ import React, { Fragment, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Breadcrumb from "../common/breadcrumb";
 import { Card, CardBody, CardHeader, Container } from "reactstrap";
-import { Table } from "react-bootstrap";
+import { Button, Table } from "react-bootstrap";
 
 const Orders = () => {
   const [orders, setOrders] = useState([]);
-  const [stores, setStores] = useState([])
-  const [storeId, setStoreId] = useState("")
-
+  const [stores, setStores] = useState([]);
+  const [storeId, setStoreId] = useState("");
 
   const handleGetOrders = (id) => {
     fetch(`http://localhost:5000/api/card/orders/${id}`)
       .then((res) => res.json())
       .then((data) => setOrders(data));
-  }
+  };
 
   const handleSetStoreId = (id) => {
-    setStoreId(id)
-    handleGetOrders(id)
-  }
-
+    setStoreId(id);
+    handleGetOrders(id);
+  };
 
   useEffect(() => {
     const usr = localStorage.getItem("user-id");
     fetch(`http://localhost:5000/api/store/getAllStores/byrole/${usr}`)
       .then((res) => res.json())
       .then((data) => {
-        setStores(data)
-        handleGetOrders(data[0]?._id)
+        setStores(data);
+        handleGetOrders(data[0]?._id);
       });
   }, []);
 
@@ -39,27 +37,27 @@ const Orders = () => {
         <Card>
           <CardHeader>
             <div className="d-flex justify-content-between">
-              <select style={{ width: "400px" }}
+              <select
+                style={{ width: "400px" }}
                 onClick={(e) => handleSetStoreId(e.target.value)}
                 class="form-select"
                 aria-label="Default select example"
                 placeholder="Selete Store"
                 required={true}
-                name="storeId">
-                {
-                  stores?.map(store => <option value={store?._id}>{store.name}</option>)
-                }
+                name="storeId"
+              >
+                {stores?.map((store) => (
+                  <option value={store?._id}>{store.name}</option>
+                ))}
               </select>
             </div>
           </CardHeader>
           <CardBody>
-
             <div className="clearfix"></div>
             <div
               id="batchDelete"
               className="category-table user-list order-table coupon-list-delete"
             >
-
               <Table striped bordered hover>
                 <thead>
                   <tr>
@@ -70,6 +68,7 @@ const Orders = () => {
                     <th>Status</th>
                     <th>Security</th>
                     <th>Number</th>
+                    <th>Action</th>
                   </tr>
                 </thead>
 
@@ -82,12 +81,19 @@ const Orders = () => {
                         <td>{item?.amount}</td>
                         <td>{item?.type}</td>
                         <td>
-                          {
-                            item?.active === "true" ? <span class="badge text-bg-warning">Sold</span> : <span class="badge text-bg-primary">Sell</span>
-                          }
+                          {item?.active === "true" ? (
+                            <span class="badge text-bg-warning">Sold</span>
+                          ) : (
+                            <span class="badge text-bg-primary">Sell</span>
+                          )}
                         </td>
                         <td>{item?.securityCode}</td>
                         <td>{item?.checkNumber}</td>
+                        <td>
+                          <Button variant="primary" size="sm">
+                            Invoice
+                          </Button>
+                        </td>
                       </tr>
                     ))}
                 </tbody>
