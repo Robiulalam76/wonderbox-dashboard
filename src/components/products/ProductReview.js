@@ -22,8 +22,6 @@ const ProductReview = () => {
     getProducts();
   }, [id]);
 
-  console.log(reviews);
-
   const handleUpdate = (e) => {
     setIsloading(true);
     e.preventDefault();

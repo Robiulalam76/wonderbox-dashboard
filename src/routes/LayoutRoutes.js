@@ -41,6 +41,7 @@ import AllCategory from "../components/category/AllCategory";
 import AddCategory from "../components/category/AddCategory";
 import CategoryRequest from "../components/category/CategoryRequest";
 import ProductReview from "../components/products/ProductReview";
+import History from "../components/History/History";
 
 const LayoutRoutes = () => {
   const [user, setUser] = useState("");
@@ -116,6 +117,11 @@ const LayoutRoutes = () => {
               element={<Create_Store />}
             />
           )}
+
+          <Route
+            path={`${process.env.PUBLIC_URL}/history`}
+            element={<History />}
+          />
 
           {/* {user && user.role === "admin" && ( */}
           <Route

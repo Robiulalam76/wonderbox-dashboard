@@ -167,6 +167,13 @@ export const MENUITEMS = [
     ],
   },
   {
+    title: "History",
+    icon: UserPlus,
+    type: "sub",
+    active: false,
+    children: [{ path: "/history", title: "History", type: "link" }],
+  },
+  {
     title: "Category",
     icon: UserPlus,
     type: "sub",
