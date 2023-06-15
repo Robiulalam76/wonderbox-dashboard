@@ -1,12 +1,14 @@
 import { Fragment, useEffect, useState } from "react";
 import { Button } from "react-bootstrap";
 import Table from "react-bootstrap/Table";
-import { Breadcrumb, Card, Container } from "reactstrap";
+import { Alert, Breadcrumb, Card, Collapse, Container } from "reactstrap";
 function History() {
   const [histories, setHistories] = useState([]);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
+
+  const [open, setOpen] = useState(false);
 
   const fetchHistories = async () => {
     try {

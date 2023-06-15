@@ -3,14 +3,14 @@ import { Fragment } from "react";
 import { Breadcrumb, Card, CardBody, CardHeader, Container } from "reactstrap";
 import ProductUpdateModal from "./ProductUpdateModal";
 import { Link } from "react-router-dom";
+import { useContext } from "react";
+import { AuthContext } from "../../ContextAPI/AuthProvider";
 
 const Products = () => {
-  const [stores, setStores] = useState([]);
+  const { stores } = useContext(AuthContext);
   const [storeId, setStoreId] = useState("");
   const [product, setProduct] = useState(null);
   const [products, setProducts] = useState([]);
-
-  console.log(products);
 
   const getProducts = (id) => {
     fetch(`http://localhost:5000/api/product/store/${id}`)
@@ -51,13 +51,6 @@ const Products = () => {
       });
   };
 
-  useEffect(() => {
-    const usr = localStorage.getItem("user-id");
-    fetch(`http://localhost:5000/api/store/getAllStores/byrole/${usr}`)
-      .then((res) => res.json())
-      .then((data) => setStores(data));
-  }, []);
-
   return (
     <Fragment>
       <Breadcrumb title="Product List" parent="Products" />
@@ -94,6 +87,7 @@ const Products = () => {
                     <th>Image</th>
                     <th>Title</th>
                     <th>Price</th>
+                    <th>Sell Price</th>
                     <th>Discount</th>
                     <th>Parent</th>
                     <th>Children</th>
@@ -109,18 +103,35 @@ const Products = () => {
                       <td>
                         {product.images.length > 0 && (
                           <img
-                            style={{ width: "40px", height: "40px" }}
+                            style={{ width: "25px", height: "25px" }}
                             src={product.images[0]}
                             alt="Product"
                           />
                         )}
                       </td>
                       <td>{product.title}</td>
+                      <td>{product.originalPrice}</td>
                       <td>{product.price}</td>
-                      <td>{product.discount}</td>
+                      <td>
+                        {product?.discount > 0 && (
+                          <span class="badge rounded-pill text-bg-danger">
+                            {product.discount}%
+                          </span>
+                        )}
+                      </td>
                       <td>{product.parent}</td>
                       <td>{product.children}</td>
-                      <td>{product.type}</td>
+                      <td>
+                        <span
+                          class={`text-white badge rounded-pill ${
+                            product.type === "Wallet"
+                              ? "text-bg-info"
+                              : "text-bg-success"
+                          }`}
+                        >
+                          {product.type}
+                        </span>
+                      </td>
                       <td>
                         <div
                           onClick={() =>
@@ -146,7 +157,7 @@ const Products = () => {
                             type="button"
                             class="btn btn-info text-white btn-sm py-1 px-1 position-relative"
                           >
-                            Veiw
+                            View
                             <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-primary">
                               {product?.totalRatings}
                             </span>
@@ -188,25 +199,11 @@ const Products = () => {
       </Container>
 
       {product && (
-        <div
-          class="modal fade bd-example-modal-lg"
-          tabindex="-1"
-          role="dialog"
-          aria-labelledby="myLargeModalLabel"
-          aria-hidden="true"
-        >
-          <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-              <div class="modal-body">
-                <ProductUpdateModal
-                  product={product}
-                  setProduct={setProduct}
-                  refetch={getProducts}
-                />
-              </div>
-            </div>
-          </div>
-        </div>
+        <ProductUpdateModal
+          product={product}
+          setProduct={setProduct}
+          refetch={getProducts}
+        />
       )}
     </Fragment>
   );

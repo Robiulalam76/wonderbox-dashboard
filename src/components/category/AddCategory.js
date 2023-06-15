@@ -205,9 +205,9 @@ const AddCategory = ({ category, setCategory, refetch }) => {
                         <span></span>
                       </Label>
                       <div className="col-xl-8 col-md-7">
-                        <div class="d-flex justify-items-center">
+                        <div class="d-flex justify-items-center flex-wrap">
                           {children.map((child, index) => (
-                            <div class="border d-flex me-2" key={index}>
+                            <div class="border d-flex me-2 mb-2" key={index}>
                               <span className="px-1">{child}</span>
                               <div
                                 onClick={() => handleRemoveChild(index)}
@@ -265,7 +265,7 @@ const AddCategory = ({ category, setCategory, refetch }) => {
                         <select
                           class="form-select"
                           aria-label="Default select example"
-                          placeholder="Selete Store"
+                          placeholder="Select Store"
                           required={true}
                           name="store"
                         >
