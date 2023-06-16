@@ -34,7 +34,6 @@ const AddCard = () => {
     }
     return randomNum;
   }
-
   const checkNumber = generateUniqueRandomNumber(12);
 
   const handleInputChange = (event) => {
@@ -84,9 +83,8 @@ const AddCard = () => {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
-        // navigate("/dashboard/cards/all");
-        // form.reset();
+        navigate("/dashboard/cards/all");
+        form.reset();
       });
   };
 
