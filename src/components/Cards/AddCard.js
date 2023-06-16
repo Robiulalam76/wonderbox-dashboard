@@ -13,7 +13,6 @@ import {
 } from "reactstrap";
 import Breadcrumb from "../common/breadcrumb";
 import { useNavigate } from "react-router-dom";
-import { v4 as uuidv4 } from "uuid";
 
 const AddCard = () => {
   const [stores, setStores] = useState([]);
@@ -24,9 +23,8 @@ const AddCard = () => {
   const [newFeature, setNewFeature] = useState("");
 
   function generateUniqueRandomNumber(numDigits) {
-    let digits = [...Array(10).keys()];
+    let digits = [...Array(numDigits).keys()];
     let randomNum = "";
-
     for (let i = digits.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
       [digits[i], digits[j]] = [digits[j], digits[i]];
@@ -37,7 +35,7 @@ const AddCard = () => {
     return randomNum;
   }
 
-  const randomNum = generateUniqueRandomNumber(12);
+  const checkNumber = generateUniqueRandomNumber(12);
 
   const handleInputChange = (event) => {
     setNewFeature(event.target.value);
@@ -62,34 +60,33 @@ const AddCard = () => {
     event.preventDefault();
     const form = event.target;
 
-    const data = {
-      title: form.title.value,
+    const newCard = {
       productId: form.productId.value,
-      type: form.type.value,
-      priveteKey: form.priveteKey.value,
-      securityCode: form.securityCode.value,
-      checkNumber: form.checkNumber.value,
       storeId: form.storeId.value,
+      price: form.price.value,
+      type: form.type.value,
+      securityCode: form.securityCode.value,
+      checkNumber: checkNumber,
     };
-    if (type === "Package") {
-      data["features"] = features;
-    }
-    if (type === "Wallet") {
-      data["discount"] = form.discount.value;
+
+    if (form.type.value === "Wallet") {
+      newCard["amount"] = form.amount.value;
+    } else {
+      newCard["features"] = features;
     }
 
-    console.log(data);
     fetch(`http://localhost:5000/api/storecard`, {
       method: "POST",
       headers: {
         "content-type": "application/json",
       },
-      body: JSON.stringify(data),
+      body: JSON.stringify(newCard),
     })
       .then((res) => res.json())
       .then((data) => {
-        navigate("/dashboard/cards/all");
-        form.reset();
+        console.log(data);
+        // navigate("/dashboard/cards/all");
+        // form.reset();
       });
   };
 
@@ -118,9 +115,6 @@ const AddCard = () => {
         <Row>
           <Col sm="12">
             <Card>
-              <CardHeader>
-                <h5>Create Card</h5>
-              </CardHeader>
               <CardBody>
                 <Form
                   className="needs-validation user-add"
@@ -129,15 +123,16 @@ const AddCard = () => {
                 >
                   <FormGroup className="row">
                     <Label className="col-xl-3 col-md-4">
-                      <span>*</span> Title
+                      <span>*</span> Price
                     </Label>
                     <div className="col-xl-8 col-md-7">
                       <Input
                         className="form-control"
-                        id="validationCustom0"
-                        type="text"
+                        id="validationCustom1"
+                        type="number"
+                        placeholder="Price"
                         required={true}
-                        name="title"
+                        name="price"
                       />
                     </div>
                   </FormGroup>
@@ -151,7 +146,7 @@ const AddCard = () => {
                         onChange={(e) => setType(e.target.value)}
                         class="form-select"
                         aria-label="Default select example"
-                        placeholder="Selete Type"
+                        placeholder="Select Type"
                         required={true}
                         name="type"
                       >
@@ -170,22 +165,19 @@ const AddCard = () => {
                           <span></span>
                         </Label>
                         <div className="col-xl-8 col-md-7">
-                          <ul class="list-group">
+                          <div class="d-flex justify-items-center flex-wrap ">
                             {features.map((feature, index) => (
-                              <li
-                                class="list-group-item d-flex justify-content-between w-full"
-                                key={index}
-                              >
-                                <span>{feature}</span>
+                              <div class="border d-flex me-2 mb-2" key={index}>
+                                <span className="px-1">{feature}</span>
                                 <div
                                   onClick={() => handleRemoveFeature(index)}
-                                  className="btn-sm px-2 btn-danger"
+                                  className="btn-sm px-2 btn-danger ms-2"
                                 >
                                   X
                                 </div>
-                              </li>
+                              </div>
                             ))}
-                          </ul>
+                          </div>
                         </div>
                       </FormGroup>
 
@@ -193,61 +185,40 @@ const AddCard = () => {
                         <Label className="col-xl-3 col-md-4">
                           <span>*</span> Features
                         </Label>
-                        <div className="col-xl-8 col-md-7">
+                        <div className="col-xl-8 col-md-7 d-flex justify-content-between">
                           <input
                             type="text"
                             value={newFeature}
                             onChange={handleInputChange}
                             className="form-control"
                           />
-                        </div>
-                      </FormGroup>
-                      <div className="row mb-4">
-                        <div className="col-xl-3 col-md-4"></div>
-                        <div className="col-xl-8 col-md-7">
                           <div
+                            disabled={newFeature ? true : false}
                             onClick={handleAddFeature}
-                            className="btn btn-warning pull-right"
-                            color="primary"
+                            className="btn btn-primary pull-right"
                           >
-                            Add Feature
+                            Add
                           </div>
                         </div>
-                      </div>
+                      </FormGroup>
                     </>
                   ) : (
                     <FormGroup className="row">
                       <Label className="col-xl-3 col-md-4">
-                        <span>*</span> Discount
+                        <span>*</span> Wallet Amount
                       </Label>
                       <div className="col-xl-8 col-md-7">
                         <Input
                           className="form-control"
                           id="validationCustom1"
-                          type="text"
-                          placeholder="discount"
+                          type="number"
+                          placeholder="Amount"
                           required={true}
-                          name="discount"
+                          name="amount"
                         />
                       </div>
                     </FormGroup>
                   )}
-
-                  <FormGroup className="row">
-                    <Label className="col-xl-3 col-md-4">
-                      <span>*</span> Check Number
-                    </Label>
-                    <div className="col-xl-8 col-md-7">
-                      <Input
-                        className="form-control"
-                        id="validationCustom1"
-                        type="text"
-                        placeholder="Check Number"
-                        required={true}
-                        name="checkNumber"
-                      />
-                    </div>
-                  </FormGroup>
 
                   <FormGroup className="row">
                     <Label className="col-xl-3 col-md-4">
@@ -257,26 +228,10 @@ const AddCard = () => {
                       <Input
                         className="form-control"
                         id="validationCustom1"
-                        type="text"
+                        type="number"
                         placeholder="Security Code"
                         required={true}
                         name="securityCode"
-                      />
-                    </div>
-                  </FormGroup>
-
-                  <FormGroup className="row">
-                    <Label className="col-xl-3 col-md-4">
-                      <span>*</span> Privete Key
-                    </Label>
-                    <div className="col-xl-8 col-md-7">
-                      <Input
-                        className="form-control"
-                        id="validationCustom1"
-                        type="text"
-                        placeholder=" Privete Key"
-                        required={true}
-                        name="priveteKey"
                       />
                     </div>
                   </FormGroup>
@@ -290,7 +245,7 @@ const AddCard = () => {
                         onChange={(e) => handleGetProduct(e.target.value)}
                         class="form-select"
                         aria-label="Default select example"
-                        placeholder="Selete Store"
+                        placeholder="Select Store"
                         required={true}
                         name="storeId"
                       >
@@ -310,7 +265,7 @@ const AddCard = () => {
                         <select
                           class="form-select"
                           aria-label="Default select example"
-                          placeholder="Selete product"
+                          placeholder="Select product"
                           required={true}
                           name="productId"
                         >

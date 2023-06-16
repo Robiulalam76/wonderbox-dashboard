@@ -42,6 +42,7 @@ import AddCategory from "../components/category/AddCategory";
 import CategoryRequest from "../components/category/CategoryRequest";
 import ProductReview from "../components/products/ProductReview";
 import History from "../components/History/History";
+import CardDetails from "../components/Cards/CardDetails";
 
 const LayoutRoutes = () => {
   const [user, setUser] = useState("");
@@ -85,6 +86,10 @@ const LayoutRoutes = () => {
           <Route
             path={`${process.env.PUBLIC_URL}/cards/add-card`}
             element={<AddCard />}
+          />
+          <Route
+            path={`${process.env.PUBLIC_URL}/cards/:id`}
+            element={<CardDetails />}
           />
 
           <Route

@@ -93,7 +93,7 @@ const Products = () => {
                     <th>Children</th>
                     <th>Type</th>
                     <th>Status</th>
-                    <th>Ratings</th>
+                    <th>Review</th>
                     <th>Action</th>
                   </tr>
                 </thead>
@@ -159,7 +159,7 @@ const Products = () => {
                           >
                             View
                             <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-primary">
-                              {product?.totalRatings}
+                              AVG {product?.totalRatings}
                             </span>
                           </button>
                         </Link>
