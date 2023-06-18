@@ -1,7 +1,6 @@
-import TextArea from "@uiw/react-md-editor/lib/components/TextArea";
-import React, { Fragment, useEffect, useState } from "react";
-import Dropdown from "react-bootstrap/Dropdown";
+import React, { Fragment, useContext, useState } from "react";
 import {
+  Button,
   Card,
   CardBody,
   CardHeader,
@@ -14,71 +13,59 @@ import {
   Row,
 } from "reactstrap";
 import Breadcrumb from "../common/breadcrumb";
-import TabsetUser from "./tabset-user";
+import { AuthContext } from "../../ContextAPI/AuthProvider";
+import { useNavigate } from "react-router-dom";
 
 const Create_Store = () => {
-  const [seller, setSeller] = useState("");
-  const [allSeller, setAllSeller] = useState([]);
+  const { user, refetchStores } = useContext(AuthContext);
+  const navigate = useNavigate();
 
-  const [logoFile, setLogoFile] = useState([])
-  const [imageFiles, setImageFiles] = useState([])
-  const [logo, setLogo] = useState("")
-  const [images, setImages] = useState([])
+  const [logoFile, setLogoFile] = useState([]);
+  const [imageFiles, setImageFiles] = useState([]);
+  const [loading, setLoading] = useState(false);
 
-
-  const uploadImagesToImageBB = async (files, action) => {
+  const uploadImagesToImageBB = async (files) => {
+    let images = [];
     for (const file of files) {
       const formData = new FormData();
-      formData.append('image', file);
-      try {
-        const response = await fetch('https://api.imgbb.com/1/upload?key=932ae96b4af949bccda61ebea8105393', {
-          method: 'POST',
+      formData.append("image", file);
+      const response = await fetch(
+        "https://api.imgbb.com/1/upload?key=932ae96b4af949bccda61ebea8105393",
+        {
+          method: "POST",
           body: formData,
-        });
-        const data = await response.json();
-        if (action === "images") {
-          setImages([...images, data?.data?.url])
         }
-        if (action === "logo") {
-          setLogo(data?.data?.url)
-        }
-      } catch (error) {
-        console.error('Error uploading image:', error);
-      }
+      );
+      const data = await response.json();
+      images.push(data?.data?.url);
     }
+    return images;
   };
 
-
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
+    setLoading(true);
     event.preventDefault();
     const form = event.target;
 
-    if (imageFiles?.length > 0) {
-      uploadImagesToImageBB(imageFiles, "images")
-    }
-
-    if (logoFile) {
-      uploadImagesToImageBB(logoFile, "logo")
-    }
+    const logo = await uploadImagesToImageBB(logoFile);
+    const images = await uploadImagesToImageBB(imageFiles);
 
     if (logo) {
-
       const data = {
         name: form.name.value,
         username: form.name.value,
-        street: form.street.value,
-        city: form.city.value,
-        country: form.country.value,
-        postalCode: form.postalCode.value,
+        address: form.address.value,
         email: form.email.value,
+        phone: form.phone.value,
         description: form.description.value,
-        userId: seller?._id,
-        logo: logo,
+        seller: user?._id,
+        logo: logo.length > 0 && logo[0],
         images: images,
-        verified: true
+        verified: true,
       };
-      console.log(data);
-      fetch(`http://localhost:5000/api/store/add/${seller?._id}`, {
+
+      // console.log(data);
+      fetch(`http://localhost:5000/api/store/add/${user?._id}`, {
         method: "POST",
         headers: {
           "content-type": "application/json",
@@ -87,30 +74,13 @@ const Create_Store = () => {
       })
         .then((res) => res.json())
         .then((data) => {
-          window.location.reload(true);
-          console.log(data);
+          setLoading(false);
+          refetchStores();
+          navigate("/store/list-store");
         });
     }
   };
 
-  useEffect(() => {
-    fetch("http://localhost:5000/api/user/")
-      .then((res) => res.json())
-      .then((data) => {
-        const seller = data.filter((item) => item.role === "seller");
-        setAllSeller(seller);
-      });
-  }, []);
-
-  useEffect(() => {
-    const usr = localStorage.getItem("user-id");
-    fetch(`http://localhost:5000/api/user/${usr}`)
-      .then((res) => res.json())
-      .then((data) => setSeller(data));
-  }, []);
-
-  // console.log(allSeller);
-  // console.log(seller);
   return (
     <Fragment>
       <Breadcrumb title="Create User" parent="Users" />
@@ -135,10 +105,10 @@ const Create_Store = () => {
                     </Label>
                     <div className="col-xl-8 col-md-7">
                       <Input
-                        // onChange={(e) => setFirstName(e.target.value)}
                         className="form-control"
                         id="validationCustom0"
                         type="text"
+                        placeholder="Title"
                         required={true}
                         name="name"
                       />
@@ -149,42 +119,14 @@ const Create_Store = () => {
                     <Label className="col-xl-3 col-md-4">
                       <span>*</span> Address
                     </Label>
-                    <div className="d-flex justify-content-between w-full gap-4 col-md-8">
+                    <div className="col-xl-8 col-md-7">
                       <Input
-                        // onChange={(e) => setLastName(e.target.value)}
-                        className="form-control w-full"
-                        id="validationCustom1"
+                        className="form-control"
+                        id="validationCustom0"
                         type="text"
+                        placeholder="Address"
                         required={true}
-                        placeholder="street"
-                        name="street"
-                      />
-                      <Input
-                        // onChange={(e) => setLastName(e.target.value)}
-                        className="form-control w-full"
-                        id="validationCustom1"
-                        type="text"
-                        required={true}
-                        placeholder="city"
-                        name="city"
-                      />
-                      <Input
-                        // onChange={(e) => setLastName(e.target.value)}
-                        className="form-control w-full"
-                        id="validationCustom1"
-                        type="text"
-                        required={true}
-                        placeholder="country"
-                        name="country"
-                      />
-                      <Input
-                        // onChange={(e) => setLastName(e.target.value)}
-                        className="form-control w-full"
-                        id="validationCustom1"
-                        type="text"
-                        required={true}
-                        placeholder="postal Code"
-                        name="postalCode"
+                        name="address"
                       />
                     </div>
                   </FormGroup>
@@ -197,7 +139,7 @@ const Create_Store = () => {
                       <Input
                         className="form-control"
                         id="validationCustom1"
-                        type="text"
+                        type="email"
                         placeholder="Email Address"
                         required={true}
                         name="email"
@@ -207,10 +149,27 @@ const Create_Store = () => {
 
                   <FormGroup className="row">
                     <Label className="col-xl-3 col-md-4">
+                      <span>*</span> Phone
+                    </Label>
+                    <div className="col-xl-8 col-md-7">
+                      <Input
+                        className="form-control"
+                        id="validationCustom1"
+                        type="number"
+                        placeholder="Phone number"
+                        required={true}
+                        name="phone"
+                      />
+                    </div>
+                  </FormGroup>
+
+                  <FormGroup className="row">
+                    <Label className="col-xl-3 col-md-4">
                       <span>*</span> Description
                     </Label>
                     <div className="col-xl-8 col-md-7">
-                      <textarea aria-label="With textarea"
+                      <textarea
+                        aria-label="With textarea"
                         className="form-control"
                         id="validationCustom1"
                         type="text"
@@ -221,21 +180,22 @@ const Create_Store = () => {
                     </div>
                   </FormGroup>
 
-
-
                   <FormGroup className="row">
                     <Label className="col-xl-3 col-md-4">
                       <span></span>
                     </Label>
                     <div className="col-xl-8 col-md-7">
-                      {
-                        logoFile && logoFile?.map(file => (
-                          <img className="pe-2" style={{ width: "70px" }} src={URL.createObjectURL(file)} alt="" />
-                        ))
-                      }
+                      {logoFile &&
+                        logoFile?.map((file) => (
+                          <img
+                            className="pe-2"
+                            style={{ width: "70px" }}
+                            src={URL.createObjectURL(file)}
+                            alt=""
+                          />
+                        ))}
                     </div>
                   </FormGroup>
-
 
                   <FormGroup className="row">
                     <Label className="col-xl-3 col-md-4">
@@ -243,24 +203,32 @@ const Create_Store = () => {
                     </Label>
                     <div className="col-xl-8 col-md-7">
                       <div class="input-group">
-                        <input onChange={(e) => setLogoFile([e.target.files[0]])} type="file" name="logo" class="form-control" required={true} id="inputGroupFile02" />
+                        <input
+                          onChange={(e) => setLogoFile([e.target.files[0]])}
+                          type="file"
+                          name="logo"
+                          class="form-control"
+                          required={true}
+                          id="inputGroupFile02"
+                        />
                       </div>
                     </div>
                   </FormGroup>
-
-
-
 
                   <FormGroup className="row">
                     <Label className="col-xl-3 col-md-4">
                       <span></span>
                     </Label>
                     <div className="col-xl-8 col-md-7">
-                      {
-                        imageFiles && imageFiles?.map(file => (
-                          <img className="pe-2" style={{ width: "70px" }} src={URL.createObjectURL(file)} alt="" />
-                        ))
-                      }
+                      {imageFiles &&
+                        imageFiles?.map((file) => (
+                          <img
+                            className="pe-2"
+                            style={{ width: "70px" }}
+                            src={URL.createObjectURL(file)}
+                            alt=""
+                          />
+                        ))}
                     </div>
                   </FormGroup>
 
@@ -270,28 +238,39 @@ const Create_Store = () => {
                     </Label>
                     <div className="col-xl-8 col-md-7">
                       <div class="input-group">
-                        <input onChange={(e) => setImageFiles([...imageFiles, e.target.files[0]])} type="file" class="form-control" id="inputGroupFile02" />
+                        <input
+                          onChange={(e) =>
+                            setImageFiles([...imageFiles, e.target.files[0]])
+                          }
+                          type="file"
+                          class="form-control"
+                          id="inputGroupFile02"
+                        />
                       </div>
                     </div>
                   </FormGroup>
 
                   <div className="row">
                     <div className="col-xl-3 col-md-4"></div>
-                    <div className="col-xl-8 col-md-7">
-                      <button
-                        className="btn btn-warning pull-right"
-                        type="submit"
-                        color="primary"
-                      >
-                        Add Store
-                      </button>
+                    <div className="col-xl-8 col-md-7 d-flex justify-content-end">
+                      {loading ? (
+                        <button class="btn btn-primary" type="button" disabled>
+                          <span
+                            class="spinner-border spinner-border-sm me-2"
+                            role="status"
+                            aria-hidden="true"
+                          >
+                            {" "}
+                          </span>
+                          Loading...
+                        </button>
+                      ) : (
+                        <Button type="submit" color="primary">
+                          Add Store
+                        </Button>
+                      )}
                     </div>
                   </div>
-
-
-
-
-
                 </Form>
               </CardBody>
             </Card>

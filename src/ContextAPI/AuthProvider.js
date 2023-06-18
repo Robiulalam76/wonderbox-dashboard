@@ -17,8 +17,15 @@ const AuthProvider = ({ children }) => {
       });
   };
 
+  const refetchStores = () => {
+    fetch(`http://localhost:5000/api/store/getAllStores/byrole/${userId}`)
+      .then((res) => res.json())
+      .then((data) => setStores(data));
+  };
+
   useEffect(() => {
     userRefetch();
+    refetchStores();
   }, [userId]);
 
   useEffect(() => {
@@ -29,18 +36,13 @@ const AuthProvider = ({ children }) => {
       });
   }, []);
 
-  useEffect(() => {
-    fetch(`http://localhost:5000/api/store/getAllStores/byrole/${userId}`)
-      .then((res) => res.json())
-      .then((data) => setStores(data));
-  }, []);
-
   const authInfo = {
     user,
     userRefetch,
     setUser,
     categories,
     stores,
+    refetchStores,
   };
   return (
     <AuthContext.Provider value={authInfo}>{children}</AuthContext.Provider>
