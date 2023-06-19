@@ -3,10 +3,12 @@ import { Link } from "react-router-dom";
 import Breadcrumb from "../common/breadcrumb";
 import { Card, CardBody, CardHeader, Container } from "reactstrap";
 import { Button, Table } from "react-bootstrap";
+import { useContext } from "react";
+import { AuthContext } from "../../ContextAPI/AuthProvider";
 
 const Orders = () => {
+  const { stores } = useContext(AuthContext);
   const [orders, setOrders] = useState([]);
-  const [stores, setStores] = useState([]);
   const [storeId, setStoreId] = useState("");
 
   const handleGetOrders = (id) => {
@@ -21,14 +23,8 @@ const Orders = () => {
   };
 
   useEffect(() => {
-    const usr = localStorage.getItem("user-id");
-    fetch(`http://localhost:5000/api/store/getAllStores/byrole/${usr}`)
-      .then((res) => res.json())
-      .then((data) => {
-        setStores(data);
-        handleGetOrders(data[0]?._id);
-      });
-  }, []);
+    handleGetOrders(stores[0]?._id);
+  }, [stores]);
 
   return (
     <Fragment>
@@ -42,7 +38,7 @@ const Orders = () => {
                 onClick={(e) => handleSetStoreId(e.target.value)}
                 class="form-select"
                 aria-label="Default select example"
-                placeholder="Selete Store"
+                placeholder="Select Store"
                 required={true}
                 name="storeId"
               >
@@ -81,11 +77,24 @@ const Orders = () => {
                         <td>{item?.amount}</td>
                         <td>{item?.type}</td>
                         <td>
-                          {item?.active === "true" ? (
+                          {(item?.state === "Enable" && (
                             <span class="badge text-bg-warning">Sold</span>
-                          ) : (
-                            <span class="badge text-bg-primary">Sell</span>
-                          )}
+                          )) ||
+                            (item?.state === "Disable" && (
+                              <span class="badge text-bg-success text-white">
+                                Sell
+                              </span>
+                            )) ||
+                            (item?.state === "Used" && (
+                              <span class="badge text-bg-info text-white">
+                                Used
+                              </span>
+                            )) ||
+                            (item?.state === "Expired" && (
+                              <span class="badge text-bg-warning text-white">
+                                Expired
+                              </span>
+                            ))}
                         </td>
                         <td>{item?.securityCode}</td>
                         <td>{item?.checkNumber}</td>

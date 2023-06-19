@@ -17,10 +17,9 @@ import { useContext } from "react";
 import { AuthContext } from "../../ContextAPI/AuthProvider";
 
 const AddProduct = () => {
-  const { user, categories } = useContext(AuthContext);
+  const { stores, categories } = useContext(AuthContext);
   const [children, setChildren] = useState([]);
   const [parent, setParent] = useState("");
-  const [stores, setStores] = useState([]);
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
 
@@ -130,13 +129,6 @@ const AddProduct = () => {
       }
     }
   };
-
-  useEffect(() => {
-    const usr = localStorage.getItem("user-id");
-    fetch(`http://localhost:5000/api/store/getAllStores/byrole/${usr}`)
-      .then((res) => res.json())
-      .then((data) => setStores(data));
-  }, []);
 
   return (
     <Fragment>

@@ -4,38 +4,37 @@ import { Tabs, TabList, TabPanel, Tab } from "react-tabs";
 import { Button, Col, Form, FormGroup, Input, Label, Row } from "reactstrap";
 
 const TabsetUser = () => {
-  const navigate = useNavigate()
-  const [role, setRole] = useState("seller")
+  const navigate = useNavigate();
+  const [role, setRole] = useState("seller");
 
-  const [isLoading, setIsLoading] = useState(false)
-  const [emailResult, setEmailResult] = useState("")
-  const [passwordResult, setPasswordResult] = useState("")
-  console.log(passwordResult);
+  const [isLoading, setIsLoading] = useState(false);
+  const [emailResult, setEmailResult] = useState("");
+  const [passwordResult, setPasswordResult] = useState("");
+  // console.log(passwordResult);
 
   const addUser = (e) => {
-    setPasswordResult("")
-    setIsLoading(true)
-    e.preventDefault()
-    const form = e.target
+    setPasswordResult("");
+    setIsLoading(true);
+    e.preventDefault();
+    const form = e.target;
 
-    const password = form.password.value
-    const confirmPassword = form.confirmPassword.value
+    const password = form.password.value;
+    const confirmPassword = form.confirmPassword.value;
 
     if (password !== confirmPassword) {
-      setIsLoading(false)
-      setPasswordResult("Password Not Matched")
+      setIsLoading(false);
+      setPasswordResult("Password Not Matched");
       return;
     }
 
     const newUser = {
-      name: form.firstName.value + ' ' + form.lastName.value,
+      name: form.firstName.value + " " + form.lastName.value,
       country: form.country.value,
       email: form.email.value,
       phone: form.phone.value,
       password: password,
       role: role,
-    }
-
+    };
 
     fetch("http://localhost:5000/api/user/register", {
       method: "POST",
@@ -47,14 +46,14 @@ const TabsetUser = () => {
       .then((res) => res.json())
       .then((data) => {
         if (data?.success === true) {
-          form.reset()
-          setIsLoading(false)
-          navigate("/users/list-user")
+          form.reset();
+          setIsLoading(false);
+          navigate("/users/list-user");
         }
-        setIsLoading(false)
+        setIsLoading(false);
       })
       .catch((error) => {
-        setIsLoading(false)
+        setIsLoading(false);
       });
   };
   return (
@@ -64,7 +63,11 @@ const TabsetUser = () => {
           <Tab className="nav-link">Account</Tab>
         </TabList>
         <TabPanel>
-          <Form onSubmit={addUser} className="needs-validation user-add" noValidate="">
+          <Form
+            onSubmit={addUser}
+            className="needs-validation user-add"
+            noValidate=""
+          >
             <h4>Account Details</h4>
 
             <FormGroup className="row">
@@ -178,19 +181,25 @@ const TabsetUser = () => {
               </Label>
               <div className="col-xl-8 col-md-7 d-flex gap-4 ">
                 <div onClick={() => setRole("seller")} class="form-check">
-                  <input class="form-check-input"
+                  <input
+                    class="form-check-input"
                     type="radio"
-                    name="flexRadioDefault" id="flexRadioDefault1"
-                    checked={role === "seller" ? true : false} />
+                    name="flexRadioDefault"
+                    id="flexRadioDefault1"
+                    checked={role === "seller" ? true : false}
+                  />
                   <label class="form-check-label" for="flexRadioDefault1">
                     Seller
                   </label>
                 </div>
                 <div onClick={() => setRole("buyer")} class="form-check">
-                  <input class="form-check-input"
+                  <input
+                    class="form-check-input"
                     type="radio"
-                    name="flexRadioDefault" id="flexRadioDefault2"
-                    checked={role === "buyer" ? true : false} />
+                    name="flexRadioDefault"
+                    id="flexRadioDefault2"
+                    checked={role === "buyer" ? true : false}
+                  />
                   <label class="form-check-label" for="flexRadioDefault2">
                     Buyer
                   </label>
@@ -204,23 +213,25 @@ const TabsetUser = () => {
               </Label>
               <div className="col-xl-8 col-md-7">
                 <div className="pull-right">
-
-                  {
-                    isLoading ? <button class="btn btn-primary" type="button" disabled>
-                      <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"> </span>
+                  {isLoading ? (
+                    <button class="btn btn-primary" type="button" disabled>
+                      <span
+                        class="spinner-border spinner-border-sm me-2"
+                        role="status"
+                        aria-hidden="true"
+                      >
+                        {" "}
+                      </span>
                       Loading...
                     </button>
-                      :
-                      <Button type="submit" color="primary">
-                        Save
-                      </Button>
-                  }
+                  ) : (
+                    <Button type="submit" color="primary">
+                      Save
+                    </Button>
+                  )}
                 </div>
               </div>
             </FormGroup>
-
-
-
           </Form>
         </TabPanel>
         {/* <TabPanel>
@@ -464,7 +475,6 @@ const TabsetUser = () => {
           </Form>
         </TabPanel> */}
       </Tabs>
-
     </Fragment>
   );
 };

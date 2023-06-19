@@ -1,10 +1,12 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useContext, useState } from "react";
 import { Tabs, TabList, TabPanel, Tab } from "react-tabs";
 import { User, Unlock } from "react-feather";
 import { useNavigate } from "react-router-dom";
 import { Button, Form, FormGroup, Input, Label } from "reactstrap";
+import { AuthContext } from "../../ContextAPI/AuthProvider";
 
 const LoginTabset = () => {
+  const { userRefetch } = useContext(AuthContext);
   const history = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -42,6 +44,7 @@ const LoginTabset = () => {
         } else {
           const id = data._id;
           localStorage.setItem("user-id", id);
+          userRefetch();
           routeChange();
         }
 
