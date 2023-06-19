@@ -21,6 +21,8 @@ import CategoryRequest from "../components/category/CategoryRequest";
 import ProductReview from "../components/products/ProductReview";
 import History from "../components/History/History";
 import CardDetails from "../components/Cards/CardDetails";
+import TransactionList from "../components/Transactions/TransactionList";
+import TransactionDetails from "../components/Transactions/TransactionDetails";
 
 const LayoutRoutes = () => {
   return (
@@ -84,6 +86,16 @@ const LayoutRoutes = () => {
           <Route
             path={`${process.env.PUBLIC_URL}/store/create-store`}
             element={<Create_Store />}
+          />
+
+          <Route
+            path={`${process.env.PUBLIC_URL}/transactions`}
+            element={<TransactionList />}
+          />
+
+          <Route
+            path={`${process.env.PUBLIC_URL}/transactions/:id`}
+            element={<TransactionDetails />}
           />
 
           <Route

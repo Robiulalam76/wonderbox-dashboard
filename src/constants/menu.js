@@ -166,6 +166,13 @@ export const MENUITEMS = [
     ],
   },
   {
+    title: "Transactions",
+    icon: UserPlus,
+    type: "sub",
+    active: false,
+    children: [{ path: "/transactions", title: "Transactions", type: "link" }],
+  },
+  {
     title: "History",
     icon: UserPlus,
     type: "sub",

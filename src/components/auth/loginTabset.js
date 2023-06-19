@@ -47,13 +47,8 @@ const LoginTabset = () => {
           userRefetch();
           routeChange();
         }
-
-        //  setUserId(id)
       });
   };
-
-  // setUserId(id)
-  // localStorage.setItem("user-id", id)
 
   return (
     <div>
