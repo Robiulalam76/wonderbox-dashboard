@@ -81,7 +81,9 @@ const Orders = () => {
                 name="storeId"
               >
                 {stores?.map((store) => (
-                  <option value={store?._id}>{store.name}</option>
+                  <option value={store?._id} selected={store?._id === storeId}>
+                    {store.name}
+                  </option>
                 ))}
               </select>
             </div>
@@ -159,7 +161,7 @@ const Orders = () => {
                         <td>{item?.address?.mobileNumber}</td>
                         <td>{moment(item?.createdAt).format("DD/MMM/YYYY")}</td>
                         <td>
-                          <Button variant="primary" size="sm">
+                          <Button variant="primary" size="sm" className="py-1">
                             Invoice
                           </Button>
                         </td>
