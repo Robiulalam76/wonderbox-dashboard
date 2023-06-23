@@ -1,14 +1,12 @@
 import { Fragment, useEffect, useState } from "react";
 import { Button } from "react-bootstrap";
 import Table from "react-bootstrap/Table";
-import { Alert, Breadcrumb, Card, Collapse, Container } from "reactstrap";
+import { Breadcrumb, Card, Container } from "reactstrap";
 function History() {
   const [histories, setHistories] = useState([]);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
-
-  const [open, setOpen] = useState(false);
 
   const fetchHistories = async () => {
     try {
@@ -42,7 +40,7 @@ function History() {
   };
   return (
     <Fragment>
-      <Breadcrumb title="Hisoty" parent="History" />
+      <Breadcrumb title="History" parent="History" />
       <Container fluid={true}>
         <Card>
           <Table responsive>
@@ -80,7 +78,7 @@ function History() {
                     </td>
                     <td>
                       {new Date(
-                        history.createAt && history.createAt
+                        history.createdAt && history.createdAt
                       ).toLocaleDateString("en-GB")}
                     </td>
                   </tr>

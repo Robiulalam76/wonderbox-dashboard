@@ -1,4 +1,6 @@
 import React, { createContext, useEffect, useState } from "react";
+import { toast } from "react-toastify";
+import errSound from "../assets/audios/error.mp3";
 
 export const AuthContext = createContext({});
 const AuthProvider = ({ children }) => {
@@ -36,6 +38,27 @@ const AuthProvider = ({ children }) => {
       });
   }, []);
 
+  const openToast = (status, message) => {
+    var audio = new Audio(errSound);
+    if (status === "warning" || status === "error") {
+      audio.play();
+    }
+    const notify =
+      (status === "success" && toast.success) ||
+      (status === "error" && toast.error) ||
+      (status === "warning" && toast.warning);
+    notify(message, {
+      position: "bottom-left",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    });
+  };
+
   const authInfo = {
     user,
     userRefetch,
@@ -43,6 +66,7 @@ const AuthProvider = ({ children }) => {
     categories,
     stores,
     refetchStores,
+    openToast,
   };
   return (
     <AuthContext.Provider value={authInfo}>{children}</AuthContext.Provider>

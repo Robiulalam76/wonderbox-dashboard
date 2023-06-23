@@ -23,6 +23,7 @@ import History from "../components/History/History";
 import CardDetails from "../components/Cards/CardDetails";
 import TransactionList from "../components/Transactions/TransactionList";
 import TransactionDetails from "../components/Transactions/TransactionDetails";
+import WithdrawRequest from "../components/Transactions/WithdrawRequest";
 
 const LayoutRoutes = () => {
   return (
@@ -96,6 +97,11 @@ const LayoutRoutes = () => {
           <Route
             path={`${process.env.PUBLIC_URL}/transactions/:id`}
             element={<TransactionDetails />}
+          />
+
+          <Route
+            path={`${process.env.PUBLIC_URL}/transactions/withdraw`}
+            element={<WithdrawRequest />}
           />
 
           <Route

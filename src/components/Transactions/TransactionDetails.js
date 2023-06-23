@@ -24,7 +24,7 @@ const TransactionDetails = () => {
     getTransaction();
   }, [id]);
 
-  const handleApprove = (id, status) => {
+  const handleApprove = (id) => {
     setIsloading(true);
     setOpen(false);
     fetch(`http://localhost:5000/api/transaction/${id}`, {
@@ -42,6 +42,8 @@ const TransactionDetails = () => {
         setIsloading(false);
       });
   };
+
+  console.log(transaction);
 
   return (
     <section className="container mx-auto px-4 ">
@@ -61,31 +63,47 @@ const TransactionDetails = () => {
               <td style={{ width: "200px" }}>Bank</td>
               <td>{transaction.bank}</td>
             </tr>
-            <tr>
-              <td style={{ width: "200px" }}>Branch</td>
-              <td>{transaction.branch}</td>
-            </tr>
+            {transaction?.branch && (
+              <tr>
+                <td style={{ width: "200px" }}>Branch</td>
+                <td>{transaction.branch}</td>
+              </tr>
+            )}
             <tr>
               <td style={{ width: "200px" }}>Account Number</td>
               <td>{transaction.accountNo}</td>
             </tr>
             <tr>
-              <td style={{ width: "200px" }}>Deposit Amount</td>
+              <td style={{ width: "200px" }}>{transaction?.type} Amount</td>
               <td>{transaction.amount}</td>
             </tr>
             <tr>
-              <td style={{ width: "200px" }}>Transaction</td>
-              <td>{transaction.txnId}</td>
+              <td style={{ width: "200px" }}>Name</td>
+              <td>{transaction.user?.name}</td>
             </tr>
             <tr>
-              {/* <td>Description</td> */}
+              <td style={{ width: "200px" }}>Email Address</td>
+              <td>{transaction.user?.email}</td>
+            </tr>
+            {transaction?.user?.phone && (
+              <tr>
+                <td style={{ width: "200px" }}>Phone Number</td>
+                <td>{transaction.user?.phone}</td>
+              </tr>
+            )}
+            {transaction?.txnId && (
+              <tr>
+                <td style={{ width: "200px" }}>Transaction</td>
+                <td>{transaction.txnId}</td>
+              </tr>
+            )}
+            <tr>
               {transaction?.description && (
                 <td colSpan={2}>{transaction.description}</td>
               )}
             </tr>
             <tr>
-              {/* <td>Description</td> */}
-              {transaction?.description && (
+              {transaction?.images?.length > 0 && (
                 <td colSpan={2} className="">
                   <div>
                     <h6 className="display-block">Payment proof</h6>

@@ -5,6 +5,7 @@ import "./index.scss";
 import Routers from "./routes";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import AuthProvider from "./ContextAPI/AuthProvider";
+import { ToastContainer } from "react-toastify";
 
 const Root = () => {
   return (
@@ -13,6 +14,7 @@ const Root = () => {
         <AuthProvider>
           <PerfectScrollbar>
             <Routers />
+            <ToastContainer />
           </PerfectScrollbar>
         </AuthProvider>
       </BrowserRouter>

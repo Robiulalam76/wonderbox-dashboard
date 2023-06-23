@@ -170,7 +170,10 @@ export const MENUITEMS = [
     icon: UserPlus,
     type: "sub",
     active: false,
-    children: [{ path: "/transactions", title: "Transactions", type: "link" }],
+    children: [
+      { path: "/transactions", title: "Transactions", type: "link" },
+      { path: "/transactions/withdraw", title: "Withdraw", type: "link" },
+    ],
   },
   {
     title: "History",

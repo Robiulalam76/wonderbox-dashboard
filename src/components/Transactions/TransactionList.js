@@ -128,15 +128,21 @@ const TransactionList = () => {
                 <tbody>
                   {transactions?.length > 0 &&
                     transactions.map((item, idx) => (
-                      <tr key={idx}>
+                      <tr
+                        key={idx}
+                        style={{
+                          backgroundColor:
+                            item?.type === "Withdraw" ? "#DDEBF7" : "white",
+                        }}
+                      >
                         <td>{item?.bank}</td>
                         <td>{item?.branch}</td>
                         <td>{item?.amount}</td>
                         <td>
                           <span
                             class={`text-white badge rounded-pill ${
-                              item.type === "Wallet"
-                                ? "text-bg-info"
+                              item.type === "Withdraw"
+                                ? "text-bg-primary"
                                 : "text-bg-success"
                             }`}
                           >
@@ -144,33 +150,15 @@ const TransactionList = () => {
                           </span>
                         </td>
                         <td>
-                          <Dropdown>
-                            <Dropdown.Toggle
-                              variant={item?.approved ? "success" : "info"}
-                              id="dropdown-basic"
-                              size="sm"
-                              className="py-1"
-                            >
-                              {item?.approved ? "Approved" : "Pending"}
-                            </Dropdown.Toggle>
-
-                            {/* <Dropdown.Menu>
-                              <Dropdown.Item
-                                onClick={() =>
-                                  handleUpdateStatus(item?._id, true)
-                                }
-                              >
-                                Approved
-                              </Dropdown.Item>
-                              <Dropdown.Item
-                                onClick={() =>
-                                  handleUpdateStatus(item?._id, false)
-                                }
-                              >
-                                Pending
-                              </Dropdown.Item>
-                            </Dropdown.Menu> */}
-                          </Dropdown>
+                          <span
+                            class={`text-white badge rounded-pill ${
+                              item?.approved
+                                ? "text-bg-success"
+                                : "text-bg-warning"
+                            }`}
+                          >
+                            {item?.approved ? "Approved" : "Pending"}
+                          </span>
                         </td>
                         <td>
                           <img
