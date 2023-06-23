@@ -14,7 +14,7 @@ const UserPanel = () => {
       <div></div>
       <h6 className="mt-3 f-14">{user.name}</h6>
       <p>{user.role}</p>
-      {/* <p>Wallet: ${user?.wallet}</p> */}
+      <p>Wallet: ${user?.wallet}</p>
     </div>
   );
 };

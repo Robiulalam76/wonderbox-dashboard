@@ -46,8 +46,6 @@ const Orders = () => {
     }
   };
 
-  console.log(orders);
-
   const handleUpdateStatus = (id, status) => {
     fetch(`http://localhost:5000/api/card/${id}`, {
       method: "PATCH",
@@ -59,7 +57,7 @@ const Orders = () => {
       .then((res) => res.json())
       .then((data) => {
         if (data?.success) {
-          handleGetOrders(id);
+          handleGetOrders(storeId);
         }
       });
   };
@@ -102,7 +100,7 @@ const Orders = () => {
                     <th>Amount</th>
                     <th>Type</th>
                     <th>Status</th>
-                    <th>Method</th>
+                    <th>Pay</th>
                     <th>Phone</th>
                     <th>Date</th>
                     <th>Action</th>
@@ -116,7 +114,7 @@ const Orders = () => {
                         <td style={{ width: "30px" }}>
                           <img
                             style={{ width: "25px", height: "25px" }}
-                            src={item?.productId?.images[0]}
+                            src={item?.product?.images[0]}
                             alt=""
                           />
                         </td>
@@ -155,9 +153,7 @@ const Orders = () => {
                             </Dropdown.Menu>
                           </Dropdown>
                         </td>
-                        <td>
-                          {item?.payment ? item?.payment?.method : "Offline"}
-                        </td>
+                        <td>{item?.payType}</td>
                         <td>{item?.address?.mobileNumber}</td>
                         <td>{moment(item?.createdAt).format("DD/MMM/YYYY")}</td>
                         <td>

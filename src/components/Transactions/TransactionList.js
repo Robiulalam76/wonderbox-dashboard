@@ -51,25 +51,25 @@ const TransactionList = () => {
     }
   };
 
-  const handleUpdateStatus = (id, status) => {
-    if (user?.role === "admin") {
-      fetch(`http://localhost:5000/api/transaction/${id}`, {
-        method: "PATCH",
-        headers: {
-          "content-type": "application/json",
-        },
-        body: JSON.stringify({ approved: status }),
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          if (data?.success) {
-            fetchDeposits();
-          }
-        });
-    } else {
-      return;
-    }
-  };
+  // const handleUpdateStatus = (id, status) => {
+  //   if (user?.role === "admin") {
+  //     fetch(`http://localhost:5000/api/transaction/${id}`, {
+  //       method: "PATCH",
+  //       headers: {
+  //         "content-type": "application/json",
+  //       },
+  //       body: JSON.stringify({ approved: status }),
+  //     })
+  //       .then((res) => res.json())
+  //       .then((data) => {
+  //         if (data?.success) {
+  //           fetchDeposits();
+  //         }
+  //       });
+  //   } else {
+  //     return;
+  //   }
+  // };
 
   return (
     <Fragment>
@@ -154,7 +154,7 @@ const TransactionList = () => {
                               {item?.approved ? "Approved" : "Pending"}
                             </Dropdown.Toggle>
 
-                            <Dropdown.Menu>
+                            {/* <Dropdown.Menu>
                               <Dropdown.Item
                                 onClick={() =>
                                   handleUpdateStatus(item?._id, true)
@@ -169,7 +169,7 @@ const TransactionList = () => {
                               >
                                 Pending
                               </Dropdown.Item>
-                            </Dropdown.Menu>
+                            </Dropdown.Menu> */}
                           </Dropdown>
                         </td>
                         <td>
