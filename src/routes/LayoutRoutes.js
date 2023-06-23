@@ -24,6 +24,7 @@ import CardDetails from "../components/Cards/CardDetails";
 import TransactionList from "../components/Transactions/TransactionList";
 import TransactionDetails from "../components/Transactions/TransactionDetails";
 import WithdrawRequest from "../components/Transactions/WithdrawRequest";
+import Withdrawals from "../components/Transactions/Withdrawals";
 
 const LayoutRoutes = () => {
   return (
@@ -100,8 +101,13 @@ const LayoutRoutes = () => {
           />
 
           <Route
-            path={`${process.env.PUBLIC_URL}/transactions/withdraw`}
+            path={`${process.env.PUBLIC_URL}/transactions/withdraw-form`}
             element={<WithdrawRequest />}
+          />
+
+          <Route
+            path={`${process.env.PUBLIC_URL}/transactions/withdrawals`}
+            element={<Withdrawals />}
           />
 
           <Route

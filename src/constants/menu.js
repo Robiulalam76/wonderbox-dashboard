@@ -172,7 +172,12 @@ export const MENUITEMS = [
     active: false,
     children: [
       { path: "/transactions", title: "Transactions", type: "link" },
-      { path: "/transactions/withdraw", title: "Withdraw", type: "link" },
+      { path: "/transactions/withdrawals", title: "Withdrawals", type: "link" },
+      {
+        path: "/transactions/withdraw-form",
+        title: "Withdraw Form",
+        type: "link",
+      },
     ],
   },
   {
