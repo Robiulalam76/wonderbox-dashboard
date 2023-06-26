@@ -1,7 +1,7 @@
 import React, { Fragment } from "react";
 import { Route, Routes } from "react-router-dom";
 import Login from "../components/auth/login";
-import LayoutRoutes from "./LayoutRoutes";
+import LayoutRoutes from "./Routes";
 
 const Routers = () => {
   return (

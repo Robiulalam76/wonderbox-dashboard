@@ -2,7 +2,7 @@ import React from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 import "./index.scss";
-import Routers from "./routes";
+import LayoutRoutes from "./routes";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import AuthProvider from "./ContextAPI/AuthProvider";
 import { ToastContainer } from "react-toastify";
@@ -13,7 +13,7 @@ const Root = () => {
       <BrowserRouter basename={"/"}>
         <AuthProvider>
           <PerfectScrollbar>
-            <Routers />
+            <LayoutRoutes />
             <ToastContainer />
           </PerfectScrollbar>
         </AuthProvider>

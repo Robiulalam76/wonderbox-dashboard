@@ -19,6 +19,16 @@ const AuthProvider = ({ children }) => {
       });
   };
 
+  useEffect(() => {
+    setLoading(true);
+    fetch(`http://localhost:5000/api/user/${userId}`)
+      .then((res) => res.json())
+      .then((data) => {
+        setUser(data);
+        setLoading(false);
+      });
+  }, []);
+
   const refetchStores = () => {
     fetch(`http://localhost:5000/api/store/getAllStores/byrole/${userId}`)
       .then((res) => res.json())
@@ -63,6 +73,7 @@ const AuthProvider = ({ children }) => {
     user,
     userRefetch,
     setUser,
+    loading,
     categories,
     stores,
     refetchStores,

@@ -1,13 +1,12 @@
-import React, { Fragment, useEffect, useState } from "react";
+import React, { Fragment, useContext, useEffect, useState } from "react";
 import { Card, Container } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { CardBody, CardHeader } from "reactstrap";
 import AddCategory from "./AddCategory";
+import { AuthContext } from "../../ContextAPI/AuthProvider";
 
 const CategoryRequest = () => {
-  const usr = localStorage.getItem("user-id");
-  const [user, setUser] = useState(null);
-  const [stores, setStores] = useState([]);
+  const { user, stores } = useContext(AuthContext);
   const [categories, setCategories] = useState([]);
   const [category, setCategory] = useState(null);
   const [storeId, setStoreId] = useState("");
@@ -16,7 +15,6 @@ const CategoryRequest = () => {
     fetch(`http://localhost:5000/api/category/request/${id}`)
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
         setCategories(data);
       });
   };
@@ -40,8 +38,8 @@ const CategoryRequest = () => {
   };
 
   useEffect(() => {
-    getCategories();
-  }, []);
+    getCategories(stores[0]?._id);
+  }, [stores]);
 
   const handleDelete = (id) => {
     const agree = window.confirm("Are you Sure!");
@@ -61,22 +59,6 @@ const CategoryRequest = () => {
     setStoreId(id);
     getCategories(id);
   };
-
-  useEffect(() => {
-    fetch(`http://localhost:5000/api/user/${usr}`)
-      .then((res) => res.json())
-      .then((data) => setUser(data));
-  }, [usr]);
-
-  useEffect(() => {
-    const usr = localStorage.getItem("user-id");
-    fetch(`http://localhost:5000/api/store/getAllStores/byrole/${usr}`)
-      .then((res) => res.json())
-      .then((data) => {
-        getCategories(data[0]._id);
-        setStores(data);
-      });
-  }, [usr]);
 
   return (
     <Fragment>

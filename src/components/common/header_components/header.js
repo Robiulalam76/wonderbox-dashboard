@@ -144,14 +144,14 @@ const Header = () => {
       {/* open */}
       <div className="page-main-header ">
         <div className="main-header-right row">
-          {/* <div className="main-header-left d-lg-none col-auto">
+          <div className="main-header-left d-lg-none col-auto">
             <div className="logo-wrapper">
               <a href="index.html">
                 <img className="blur-up lazyloaded" src={logo} alt="" />
               </a>
             </div>
-          </div> */}
-          {/* <div className="mobile-sidebar col-auto p-0">
+          </div>
+          <div className="mobile-sidebar col-auto p-0">
             <div className="media-body text-end switch-sm">
               <label className="switch">
                 <a href="#javaScript" onClick={openCloseSidebar}>
@@ -159,12 +159,12 @@ const Header = () => {
                 </a>
               </label>
             </div>
-          </div> */}
+          </div>
           <div className="nav-right col">
             <ul className={"nav-menus " + (navMenus ? "open" : "")}>
-              {/* <li>
+              <li>
                 <SearchHeader />
-              </li> */}
+              </li>
               <li>
                 <a onClick={goFull} className="text-dark" href="#javaScript">
                   <Maximize2 />
@@ -199,12 +199,12 @@ const Header = () => {
               </li> */}
               <UserMenu />
             </ul>
-            {/* <div
+            <div
               className="d-lg-none mobile-toggle pull-right"
               onClick={() => toggle()}
             >
               <MoreHorizontal />
-            </div> */}
+            </div>
           </div>
         </div>
       </div>

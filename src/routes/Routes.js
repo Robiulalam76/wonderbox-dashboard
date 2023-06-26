@@ -1,6 +1,5 @@
 import React, { Fragment } from "react";
 import { Route, Routes } from "react-router-dom";
-import App from "../components/app";
 import Datatable from "../components/common/datatable";
 import Dashboard from "../components/dashboard";
 import Invoice from "../components/invoice";
@@ -25,12 +24,15 @@ import TransactionList from "../components/Transactions/TransactionList";
 import TransactionDetails from "../components/Transactions/TransactionDetails";
 import WithdrawRequest from "../components/Transactions/WithdrawRequest";
 import Withdrawals from "../components/Transactions/Withdrawals";
+import Main from "../Layout/Main";
+import AdminRoute from "./AdminRoute";
+import SellerRoute from "./SellerRoute";
 
 const LayoutRoutes = () => {
   return (
     <Fragment>
       <Routes>
-        <Route element={<App />}>
+        <Route element={<Main />}>
           <Route
             path={`${process.env.PUBLIC_URL}/dashboard`}
             element={<Dashboard />}
@@ -59,7 +61,11 @@ const LayoutRoutes = () => {
 
           <Route
             path={`${process.env.PUBLIC_URL}/cards/add-card`}
-            element={<AddCard />}
+            element={
+              <AdminRoute>
+                <AddCard />
+              </AdminRoute>
+            }
           />
           <Route
             path={`${process.env.PUBLIC_URL}/cards/:id`}
@@ -70,14 +76,14 @@ const LayoutRoutes = () => {
             path={`${process.env.PUBLIC_URL}/sales/orders`}
             element={<Orders />}
           />
-          <Route
-            path={`${process.env.PUBLIC_URL}/sales/transactions`}
-            element={<Transactionsales />}
-          />
 
           <Route
             path={`${process.env.PUBLIC_URL}/users/list-user`}
-            element={<Listuser />}
+            element={
+              <AdminRoute>
+                <Listuser />
+              </AdminRoute>
+            }
           />
 
           <Route
@@ -92,27 +98,47 @@ const LayoutRoutes = () => {
 
           <Route
             path={`${process.env.PUBLIC_URL}/transactions`}
-            element={<TransactionList />}
+            element={
+              <AdminRoute>
+                <TransactionList />
+              </AdminRoute>
+            }
           />
 
           <Route
             path={`${process.env.PUBLIC_URL}/transactions/:id`}
-            element={<TransactionDetails />}
+            element={
+              <AdminRoute>
+                <TransactionDetails />
+              </AdminRoute>
+            }
           />
 
           <Route
             path={`${process.env.PUBLIC_URL}/transactions/withdraw-form`}
-            element={<WithdrawRequest />}
+            element={
+              <SellerRoute>
+                <WithdrawRequest />
+              </SellerRoute>
+            }
           />
 
           <Route
             path={`${process.env.PUBLIC_URL}/transactions/withdrawals`}
-            element={<Withdrawals />}
+            element={
+              <SellerRoute>
+                <Withdrawals />
+              </SellerRoute>
+            }
           />
 
           <Route
             path={`${process.env.PUBLIC_URL}/history`}
-            element={<History />}
+            element={
+              <AdminRoute>
+                <History />
+              </AdminRoute>
+            }
           />
 
           <Route
@@ -132,22 +158,11 @@ const LayoutRoutes = () => {
 
           <Route
             path={`${process.env.PUBLIC_URL}/users/create-user`}
-            element={<Createuser />}
-          />
-
-          <Route
-            path={`${process.env.PUBLIC_URL}/settings/profile`}
-            element={<Profile />}
-          />
-
-          <Route
-            path={`${process.env.PUBLIC_URL}/invoice`}
-            element={<Invoice />}
-          />
-
-          <Route
-            path={`${process.env.PUBLIC_URL}/data-table`}
-            element={<Datatable />}
+            element={
+              <AdminRoute>
+                <Createuser />
+              </AdminRoute>
+            }
           />
         </Route>
       </Routes>
